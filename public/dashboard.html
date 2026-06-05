@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inner GOAT — Sticker Tracking</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+body{font-family:Poppins,Arial,sans-serif;background:#0E0E0E;color:#fff;margin:0;padding:26px;max-width:1040px;margin:0 auto}
+a{color:#FF5F00}.dot{display:inline-block;width:18px;height:18px;border-radius:5px;background:#FF5F00;vertical-align:-2px;margin-right:6px}
+h1{font-size:22px}.sub{opacity:.6;margin-top:-6px;font-size:14px}
+.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.card{background:#171717;border:1px solid #262626;border-radius:16px;padding:18px;margin-bottom:16px}
+.card.big{display:flex;flex-direction:column;justify-content:center}
+.num{font-size:56px;font-weight:800;color:#FF5F00;line-height:1}.lab{opacity:.6}
+h3{margin:0 0 10px}table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;opacity:.5;font-weight:600;padding:6px 4px}td{padding:6px 4px;border-top:1px solid #222;opacity:.9}
+@media(max-width:720px){.cards{grid-template-columns:1fr}}
+</style></head>
+<body>
+<h1><span class="dot"></span> Inner GOAT — Sticker Tracking</h1>
+<p class="sub">SuperReturn Berlin · live · <a href="/admin">Ziele bearbeiten</a> · <a href="#" onclick="location.reload()">↻ aktualisieren</a></p>
+<div class="cards">
+  <div class="card big"><div id="total" class="num">–</div><div class="lab">Scans gesamt</div>
+    <div style="margin-top:10px"><span id="unique" style="font-size:26px;font-weight:800">–</span> <span class="lab">einzelne Personen</span></div>
+    <div id="botnote" class="lab" style="font-size:12px;margin-top:6px"></div></div>
+  <div class="card"><canvas id="device"></canvas></div>
+  <div class="card"><canvas id="os"></canvas></div>
+</div>
+<div class="card"><h3>Scans pro Sticker</h3><canvas id="links" height="170"></canvas></div>
+<div class="cards">
+  <div class="card"><h3>Verlauf</h3><canvas id="day" height="150"></canvas></div>
+  <div class="card"><h3>Länder</h3><canvas id="country" height="150"></canvas></div>
+  <div class="card"><h3>Städte</h3><canvas id="city" height="150"></canvas></div>
+  <div class="card"><h3>Browser</h3><canvas id="browser" height="150"></canvas></div>
+</div>
+<div class="card"><h3>Letzte Scans</h3><table id="recent"></table></div>
+<script>
+const O='#FF5F00', P=['#FF5F00','#ffaa4d','#0EA5E9','#22C55E','#A855F7','#EAB308','#EF4444','#64748B'];
+Chart.defaults.color='#bbb'; Chart.defaults.borderColor='#262626';
+function getKey(){let k=sessionStorage.getItem('ig_key'); if(!k){k=prompt('Passwort (ADMIN_PASSWORD):')||''; sessionStorage.setItem('ig_key',k);} return k;}
+async function load(){
+  const k=getKey();
+  const res=await fetch('/api/stats?key='+encodeURIComponent(k));
+  if(res.status===401){sessionStorage.removeItem('ig_key'); alert('Falsches Passwort.'); return load();}
+  const d=await res.json();
+  total.textContent=d.total;
+  document.getElementById('unique').textContent=d.unique ?? '–';
+  document.getElementById('botnote').textContent=
+    (d.gps ? `${d.gps} mit genauem GPS-Standort` : '') +
+    (d.gps && d.bots ? ' · ' : '') +
+    (d.bots ? `${d.bots} Bot-/Vorschau-Aufrufe gefiltert` : '');
+  const pie=(id,rows,t)=>new Chart(document.getElementById(id),{type:'doughnut',
+    data:{labels:rows.map(x=>x.k||'—'),datasets:[{data:rows.map(x=>x.n),backgroundColor:P}]},
+    options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10}},title:{display:true,text:t}}}});
+  pie('device',d.byDevice,'Gerät'); pie('os',d.byOs,'OS');
+  new Chart(links,{type:'bar',data:{labels:d.links.map(x=>x.name),datasets:[{data:d.links.map(x=>x.n),backgroundColor:O}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
+  new Chart(day,{type:'line',data:{labels:d.byDay.map(x=>x.k),datasets:[{data:d.byDay.map(x=>x.n),borderColor:O,backgroundColor:'rgba(255,95,0,.15)',fill:true,tension:.3}]},options:{plugins:{legend:{display:false}}}});
+  new Chart(country,{type:'bar',data:{labels:d.byCountry.map(x=>x.k),datasets:[{data:d.byCountry.map(x=>x.n),backgroundColor:'#0EA5E9'}]},options:{plugins:{legend:{display:false}}}});
+  new Chart(city,{type:'bar',data:{labels:d.byCity.map(x=>x.k),datasets:[{data:d.byCity.map(x=>x.n),backgroundColor:'#22C55E'}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
+  new Chart(browser,{type:'doughnut',data:{labels:d.byBrowser.map(x=>x.k),datasets:[{data:d.byBrowser.map(x=>x.n),backgroundColor:P}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10}}}}});
+  document.getElementById('recent').innerHTML='<tr><th>Zeit</th><th>Sticker</th><th>Gerät</th><th>OS</th><th>Ort</th><th>Genauer Standort</th></tr>'+
+    d.recent.map(x=>{
+      const gps = (x.lat!=null && x.lng!=null)
+        ? `<a href="https://www.google.com/maps?q=${x.lat},${x.lng}" target="_blank" rel="noopener">📍 Karte${x.acc?` (±${x.acc} m)`:''}</a>`
+        : '<span style="opacity:.4">—</span>';
+      return `<tr><td>${x.ts}</td><td>${x.name}</td><td>${x.device}</td><td>${x.os}</td><td>${[x.city,x.country].filter(Boolean).join(', ')}</td><td>${gps}</td></tr>`;
+    }).join('');
+}
+load();
+</script>
+</body></html>

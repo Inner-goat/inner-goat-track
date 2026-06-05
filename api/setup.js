@@ -1,0 +1,32 @@
+import { sql } from "@vercel/postgres";
+import { auth, SEED } from "./_lib.js";
+
+// GET /api/setup?key=PW  → create tables + seed the 8 links (run once)
+export default async function handler(req, res) {
+  if (!auth(req, res)) return;
+  await sql`CREATE TABLE IF NOT EXISTS links (
+    id TEXT PRIMARY KEY, name TEXT, cta TEXT, destination TEXT, created TIMESTAMPTZ DEFAULT now())`;
+  await sql`CREATE TABLE IF NOT EXISTS scans (
+    id BIGSERIAL PRIMARY KEY, link_id TEXT, ts TIMESTAMPTZ,
+    country TEXT, city TEXT, region TEXT, device TEXT, os TEXT, browser TEXT,
+    lang TEXT, referer TEXT, ua TEXT, is_bot BOOLEAN DEFAULT false, visit_hash TEXT)`;
+  // Falls die Tabelle aus einer früheren Version stammt: Spalten nachrüsten.
+  await sql`ALTER TABLE scans ADD COLUMN IF NOT EXISTS is_bot BOOLEAN DEFAULT false`;
+  await sql`ALTER TABLE scans ADD COLUMN IF NOT EXISTS visit_hash TEXT`;
+  await sql`ALTER TABLE scans ADD COLUMN IF NOT EXISTS lat DOUBLE PRECISION`;
+  await sql`ALTER TABLE scans ADD COLUMN IF NOT EXISTS lng DOUBLE PRECISION`;
+  await sql`ALTER TABLE scans ADD COLUMN IF NOT EXISTS acc INT`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_scans_link ON scans(link_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_scans_hash ON scans(visit_hash)`;
+  // Lead-Capture (Klickpfad-Funnel "Ideenliste")
+  await sql`CREATE TABLE IF NOT EXISTS leads (
+    id BIGSERIAL PRIMARY KEY, email TEXT UNIQUE, source TEXT, answer TEXT, ts TIMESTAMPTZ DEFAULT now())`;
+  for (const [id, name, cta, dest] of SEED) {
+    await sql`INSERT INTO links (id, name, cta, destination) VALUES (${id}, ${name}, ${cta}, ${dest})
+              ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, cta=EXCLUDED.cta, destination=EXCLUDED.destination`;
+  }
+  // DB deklarativ an den SEED angleichen: Links entfernen, die nicht (mehr) im SEED stehen.
+  const ids = SEED.map(s => s[0]);
+  const { rowCount: removed } = await sql`DELETE FROM links WHERE id <> ALL(${ids}::text[])`;
+  res.json({ ok: true, message: `Setup fertig. ${SEED.length} aktive Links, ${removed} alte entfernt.`, next: "/dashboard und /admin öffnen (Passwort = ADMIN_PASSWORD)." });
+}

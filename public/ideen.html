@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deine Ideenliste ist unendlich — Inner GOAT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--o:#FF5F00;--bg:#0E0E0E;--card:#171717;--line:#2a2a2a}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:Poppins,Arial,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#2a1400, var(--bg));color:#fff;display:flex;align-items:center;justify-content:center;padding:22px;min-height:100%}
+  .wrap{width:100%;max-width:460px}
+  .goat{width:54px;height:auto;display:block;margin:0 auto 18px}
+  .dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px}
+  .dot{width:8px;height:8px;border-radius:99px;background:#3a3a3a;transition:.3s}
+  .dot.on{background:var(--o);width:22px}
+  .screen{display:none;animation:in .35s ease}
+  .screen.on{display:block}
+  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  h1{font-size:30px;line-height:1.12;font-weight:900;margin:0 0 12px;text-align:center}
+  h1 .hl{color:var(--o)}
+  p.sub{opacity:.75;text-align:center;font-size:15px;line-height:1.5;margin:0 0 26px}
+  button,.btn{width:100%;background:var(--o);color:#fff;border:0;border-radius:14px;padding:16px;font-family:inherit;font-weight:800;font-size:16px;cursor:pointer;transition:.15s;display:block;text-align:center;text-decoration:none}
+  button:hover,.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,95,0,.35)}
+  .opt{background:var(--card);border:1px solid var(--line);margin-bottom:10px;font-weight:600;text-align:left}
+  .opt:hover{border-color:var(--o);transform:none;box-shadow:none}
+  input[type=email]{width:100%;padding:16px;border-radius:14px;border:1px solid var(--line);background:#0e0e0e;color:#fff;font-family:inherit;font-size:16px;margin-bottom:12px}
+  input[type=email]:focus{outline:0;border-color:var(--o)}
+  .magnet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:20px}
+  .magnet .ic{font-size:28px}
+  .magnet b{display:block;font-size:14px}.magnet span{font-size:12px;opacity:.6}
+  .fine{font-size:11px;opacity:.45;text-align:center;margin-top:14px;line-height:1.5}
+  .ghost{background:transparent;border:1px solid var(--line);color:#fff;margin-top:10px;font-weight:600}
+  .ghost:hover{box-shadow:none;border-color:#555}
+  .err{color:#ff7a7a;font-size:13px;text-align:center;margin:-4px 0 12px;min-height:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg class="goat" viewBox="0 0 215 183" xmlns="http://www.w3.org/2000/svg" aria-label="Inner GOAT"><g fill="#FF5F00">
+    <path d="M159.5,182.9h-49.5c0-28.7,3.3-58.4,27-81.2,23.4-22.5,53.7-25.6,83-25.6v49.5c-30.4,0-41.1,4.5-48.7,11.7-7.3,7-11.8,17.1-11.8,45.5Z"/>
+    <path d="M110,182.9h-49.5c0-28.5-4.5-38.5-11.8-45.5-7.5-7.2-18.3-11.7-48.7-11.7v-49.5c29.3,0,59.7,3.1,83,25.6,23.7,22.8,27,52.5,27,81.2Z"/>
+    <path d="M110,87.9c-42.5,0-73.8-25.4-101.3-52.9L43.8,0c28,28,45.9,38.4,66.3,38.4S148.3,28,176.3,0l35,35c-18,18-32.6,29.8-47.3,38.1-17.5,9.9-35.2,14.8-54,14.8Z"/>
+  </g></svg>
+
+  <div class="dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+
+  <!-- 1 HOOK -->
+  <section class="screen on" id="s1">
+    <h1>Deine Ideenliste ist <span class="hl">unendlich</span>.<br>Deine Zeit nicht.</h1>
+    <p class="sub">In 60 Sekunden zeig ich dir, welche Idee du <b>zuerst</b> angehst — und wie du aus „too many ideas" Ergebnisse machst. 🐐</p>
+    <button onclick="go(2)">Los geht's →</button>
+  </section>
+
+  <!-- 2 FRAGE -->
+  <section class="screen" id="s2">
+    <h1>Mal ehrlich:</h1>
+    <p class="sub">Wie viele Ideen warten gerade auf Umsetzung?</p>
+    <button class="opt" onclick="pick('1–5')">1–5 — überschaubar</button>
+    <button class="opt" onclick="pick('6–20')">6–20 — wird langsam viel</button>
+    <button class="opt" onclick="pick('20+')">20+ — totales Ideen-Chaos</button>
+  </section>
+
+  <!-- 3 EMAIL -->
+  <section class="screen" id="s3">
+    <h1>Hol dir die <span class="hl">GOAT Ideen-Priorisierung</span></h1>
+    <p class="sub">Die 1-Seiten-Matrix, mit der du in 5 Minuten weißt, welche Idee zuerst dran ist.</p>
+    <div class="magnet"><div class="ic">📄</div><div><b>GOAT Ideen-Priorisierung (PDF)</b><span>Impact × Aufwand · 1 Seite · sofort nutzbar</span></div></div>
+    <div class="err" id="err"></div>
+    <input type="email" id="email" placeholder="deine@email.de" autocomplete="email" inputmode="email">
+    <button id="submit" onclick="submit()">Schick mir die Matrix →</button>
+    <div class="fine">Kein Spam. Du bekommst die Matrix + ab und zu echte GOAT-Tipps. Abmeldung jederzeit.</div>
+  </section>
+
+  <!-- 4 DANKE + ANGEBOT -->
+  <section class="screen" id="s4">
+    <h1>Stark. Check deine <span class="hl">Mailbox</span> 🐐</h1>
+    <p class="sub">Die Ideen-Priorisierung ist unterwegs zu dir. Während du wartest:</p>
+    <div class="magnet"><div class="ic">🃏</div><div><b>Aus Ideen werden Ergebnisse</b><span>Das Tool, mit dem du Ideen sofort umsetzt</span></div></div>
+    <a class="btn" id="offer" href="https://inner-goat.com/storytelling-app/">So setzt du sie um → Storytelling Cards</a>
+    <a class="btn ghost" href="https://inner-goat.com/">Mehr über Inner GOAT</a>
+  </section>
+</div>
+
+<script>
+let answer = "";
+function setDots(n){ document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on', i < n)); }
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on')); document.getElementById('s'+id).classList.add('on'); setDots(id); window.scrollTo(0,0); }
+function go(id){ show(id); }
+function pick(a){ answer = a; show(3); setTimeout(()=>document.getElementById('email').focus(), 300); }
+async function submit(){
+  const el = document.getElementById('email'), err = document.getElementById('err'), btn = document.getElementById('submit');
+  const email = el.value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent = "Bitte gib eine gültige E-Mail ein."; el.focus(); return; }
+  err.textContent = ""; btn.disabled = true; btn.textContent = "Sekunde …";
+  try{
+    const r = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, source:'ideen', answer})});
+    if(!r.ok) throw new Error();
+    show(4);
+  }catch(e){
+    err.textContent = "Hat nicht geklappt — bitte nochmal."; btn.disabled = false; btn.textContent = "Schick mir die Matrix →";
+  }
+}
+document.getElementById('email').addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+</script>
+</body>
+</html>
