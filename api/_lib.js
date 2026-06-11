@@ -74,6 +74,7 @@ const WEB   = "https://inner-goat.com/";
 const ACAD  = "https://inner-goat.com/inner-goat-academy/";
 const YT    = "https://www.youtube.com/watch?v=J9Ljgx-6I2o";
 const IDEEN = "https://inner-goat-track.vercel.app/ideen"; // Klickpfad-Funnel (Sticker "Ideenliste")
+const KI    = "https://inner-goat-track.vercel.app/ki";    // Klickpfad-Funnel (Instagram "KI-App-Bauplan")
 
 export const SEED = [
   // Aktuelle Serie (Juni 2026)
@@ -82,4 +83,6 @@ export const SEED = [
   ["web-argument",     "Dein bestes Argument bist du",              "Website",            WEB],
   ["academy-netzwerk", "Netzwerkst du noch oder verdienst du schon","Academy",            ACAD],
   ["web-ideenliste",   "Deine Ideenliste ist unendlich",            "Website",            IDEEN],
+  // Instagram-Reel "Hör auf, teure App-Abos zu zahlen" (Juni 2026)
+  ["ig-ki",            "Hör auf, teure App-Abos zu zahlen",         "KI-Funnel",          KI],
 ];

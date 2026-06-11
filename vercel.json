@@ -3,6 +3,10 @@
     { "source": "/r/:id", "destination": "/api/r/:id" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/ideen", "destination": "/ideen.html" }
+    { "source": "/ideen", "destination": "/ideen.html" },
+    { "source": "/ki", "destination": "/ki.html" }
+  ],
+  "crons": [
+    { "path": "/api/cron/followup", "schedule": "0 9 * * *" }
   ]
 }

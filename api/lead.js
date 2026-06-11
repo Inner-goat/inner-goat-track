@@ -1,25 +1,63 @@
 import { sql } from "@vercel/postgres";
 
-const PDF_URL = "https://inner-goat-track.vercel.app/goat-ideen-priorisierung.pdf";
+const BASE = "https://inner-goat-track.vercel.app";
 const FROM = "Inner GOAT <info@inner-goat.com>";
 
-function emailHtml() {
+// HTML-Escaping, damit ein Name nie Markup in die Mail einschleusen kann.
+function esc(s = "") {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function hi(name) { const n = (name || "").trim(); return n ? `Hey ${esc(n)},` : "Hey,"; }
+
+// ── Kampagnen-Konfiguration ─────────────────────────────────────────
+// Pro Quelle (source) ein Lead-Magnet: PDF + Mail-Text. Neue Kampagne =
+// einfach neuen Eintrag ergänzen.
+const CAMPAIGNS = {
+  // Sticker / Website "Ideenliste"
+  ideen: {
+    pdf: `${BASE}/goat-ideen-priorisierung.pdf`,
+    filename: "GOAT_Ideen-Priorisierung.pdf",
+    subject: "Deine GOAT Ideen-Priorisierung 🐐",
+    title: "Deine Ideen-Priorisierung ist da.",
+    body: (name) => `
+      <p>${hi(name)}</p>
+      <p>deine Ideenliste ist unendlich – deine Zeit nicht. Hier ist die <b>1-Seiten-Matrix</b>,
+         mit der du in 5 Minuten weißt, welche Idee zuerst dran ist:</p>`,
+    cta: { label: "📄 GOAT Ideen-Priorisierung öffnen", url: `${BASE}/goat-ideen-priorisierung.pdf` },
+    outro: `<p>Und wenn du aus Ideen <b>Ergebnisse</b> machen willst: Genau dafür sind die
+            <a href="https://inner-goat.com/storytelling-app/" style="color:#FF5F00;font-weight:700">Storytelling Cards</a>.</p>`
+  },
+  // Instagram "Hör auf, teure App-Abos zu zahlen" → KI-App-Bauplan
+  ki: {
+    pdf: `${BASE}/goat-ki-bauplan.pdf`,
+    filename: "GOAT_KI-App-Bauplan.pdf",
+    subject: "Dein GOAT KI-App-Bauplan 🐐",
+    title: "Dein KI-App-Bauplan ist da.",
+    body: (name) => `
+      <p>${hi(name)}</p>
+      <p>du willst eigene Apps mit KI bauen – statt jeden Monat für teure Abos zu zahlen?
+         Genau dafür ist dieser Bauplan. <b>Der komplette Stack, die 5 Schritte und 3 echte Beispiele</b>
+         auf 2 Seiten:</p>`,
+    cta: { label: "📄 GOAT KI-App-Bauplan öffnen", url: `${BASE}/goat-ki-bauplan.pdf` },
+    outro: `<p>In den nächsten Tagen schick ich dir noch, wie du aus dem Bauplan wirklich
+            <b>deine erste eigene App</b> machst. Halt die Augen offen. 👀</p>`
+  }
+};
+
+function emailHtml(c, name) {
   return `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:0 auto;color:#0E0E0E">
     <div style="background:#FF5F00;padding:22px 24px;border-radius:14px 14px 0 0">
       <div style="font-weight:800;font-size:14px">INNER GOAT 🐐</div>
-      <div style="font-weight:800;font-size:22px;margin-top:4px">Deine Ideen-Priorisierung ist da.</div>
+      <div style="font-weight:800;font-size:22px;margin-top:4px">${c.title}</div>
     </div>
     <div style="padding:24px;background:#fafafa;border-radius:0 0 14px 14px">
-      <p>Hey,</p>
-      <p>deine Ideenliste ist unendlich – deine Zeit nicht. Hier ist die <b>1-Seiten-Matrix</b>,
-         mit der du in 5 Minuten weißt, welche Idee zuerst dran ist:</p>
+      ${c.body(name)}
       <p style="text-align:center;margin:26px 0">
-        <a href="${PDF_URL}" style="background:#FF5F00;color:#fff;text-decoration:none;font-weight:800;padding:14px 26px;border-radius:12px;display:inline-block">
-          📄 GOAT Ideen-Priorisierung öffnen</a>
+        <a href="${c.cta.url}" style="background:#FF5F00;color:#fff;text-decoration:none;font-weight:800;padding:14px 26px;border-radius:12px;display:inline-block">
+          ${c.cta.label}</a>
       </p>
-      <p>Und wenn du aus Ideen <b>Ergebnisse</b> machen willst: Genau dafür sind die
-         <a href="https://inner-goat.com/storytelling-app/" style="color:#FF5F00;font-weight:700">Storytelling Cards</a>.</p>
+      ${c.outro}
       <p style="margin-top:24px">Trust your goat,<br><b>Marco · Inner GOAT</b></p>
       <p style="font-size:12px;color:#888;margin-top:20px">inner-goat.com · from founders to founders</p>
     </div>
@@ -27,41 +65,45 @@ function emailHtml() {
 }
 
 // Schickt die Lead-Magnet-Mail über Resend. Nur aktiv, wenn RESEND_API_KEY gesetzt ist.
-async function sendMail(to) {
+async function sendMail(to, c, name) {
   if (!process.env.RESEND_API_KEY) return { sent: false, reason: "no_key" };
   let attachments;
   try {
-    const buf = Buffer.from(await (await fetch(PDF_URL)).arrayBuffer());
-    attachments = [{ filename: "GOAT_Ideen-Priorisierung.pdf", content: buf.toString("base64") }];
+    const buf = Buffer.from(await (await fetch(c.pdf)).arrayBuffer());
+    attachments = [{ filename: c.filename, content: buf.toString("base64") }];
   } catch { /* Anhang optional – Link ist im Mailtext */ }
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       from: FROM, to: [to], reply_to: "info@inner-goat.com",
-      subject: "Deine GOAT Ideen-Priorisierung 🐐",
-      html: emailHtml(), attachments
+      subject: c.subject, html: emailHtml(c, name), attachments
     })
   });
   return { sent: r.ok, status: r.status };
 }
 
-// POST /api/lead  {email, source, answer}
+// POST /api/lead  {email, name, source, answer}
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
-  const { email, source, answer } = req.body || {};
+  const { email, name, source, answer } = req.body || {};
   if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return res.status(400).json({ error: "invalid_email" });
   }
   const mail = email.toLowerCase().slice(0, 200);
+  const nm = (name || "").trim().slice(0, 80);
+  const src = (source || "ideen").slice(0, 40);
+  const campaign = CAMPAIGNS[src] || CAMPAIGNS.ideen;
   try {
-    await sql`INSERT INTO leads (email, source, answer, ts)
-              VALUES (${mail}, ${source || "ideen"}, ${answer || ""}, now())
-              ON CONFLICT (email) DO UPDATE SET source=EXCLUDED.source, answer=EXCLUDED.answer`;
+    await sql`INSERT INTO leads (email, name, source, answer, ts)
+              VALUES (${mail}, ${nm}, ${src}, ${answer || ""}, now())
+              ON CONFLICT (email) DO UPDATE SET
+                name = COALESCE(NULLIF(EXCLUDED.name,''), leads.name),
+                source = EXCLUDED.source, answer = EXCLUDED.answer`;
   } catch (e) {
     return res.status(500).json({ error: "db" });
   }
   let mailResult = { sent: false };
-  try { mailResult = await sendMail(mail); } catch (e) { /* Lead ist gespeichert, Mail nicht blockierend */ }
+  try { mailResult = await sendMail(mail, campaign, nm); } catch (e) { /* Lead ist gespeichert, Mail nicht blockierend */ }
   res.json({ ok: true, mailed: mailResult.sent });
 }

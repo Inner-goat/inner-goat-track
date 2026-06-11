@@ -18,9 +18,12 @@ export default async function handler(req, res) {
   await sql`ALTER TABLE scans ADD COLUMN IF NOT EXISTS acc INT`;
   await sql`CREATE INDEX IF NOT EXISTS idx_scans_link ON scans(link_id)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_scans_hash ON scans(visit_hash)`;
-  // Lead-Capture (Klickpfad-Funnel "Ideenliste")
+  // Lead-Capture (Klickpfad-Funnels "Ideenliste" + "KI-App-Bauplan")
   await sql`CREATE TABLE IF NOT EXISTS leads (
     id BIGSERIAL PRIMARY KEY, email TEXT UNIQUE, source TEXT, answer TEXT, ts TIMESTAMPTZ DEFAULT now())`;
+  // Spalten nachrüsten: Name (Funnel fragt jetzt Vorname) + Followup-Tracking (Mail 2).
+  await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS name TEXT`;
+  await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS followup_sent BOOLEAN DEFAULT false`;
   for (const [id, name, cta, dest] of SEED) {
     await sql`INSERT INTO links (id, name, cta, destination) VALUES (${id}, ${name}, ${cta}, ${dest})
               ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, cta=EXCLUDED.cta, destination=EXCLUDED.destination`;
