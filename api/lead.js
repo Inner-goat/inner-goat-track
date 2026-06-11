@@ -35,12 +35,13 @@ const CAMPAIGNS = {
     title: "Dein KI-App-Bauplan ist da.",
     body: (name) => `
       <p>${hi(name)}</p>
-      <p>du willst eigene Apps mit KI bauen – statt jeden Monat für teure Abos zu zahlen?
-         Genau dafür ist dieser Bauplan. <b>Der komplette Stack, die 5 Schritte und 3 echte Beispiele</b>
-         auf 2 Seiten:</p>`,
+      <p>du willst eigene Apps &amp; Tools mit KI bauen – statt jeden Monat für teure Abos zu zahlen?
+         Hier ist das <b>Schritt-für-Schritt-Rezept</b>, mit dem du deine erste eigene Web-Seite baust
+         und live schaltest – 5 Seiten, zum direkten Nachbauen:</p>`,
     cta: { label: "📄 GOAT KI-App-Bauplan öffnen", url: `${BASE}/goat-ki-bauplan.pdf` },
-    outro: `<p>In den nächsten Tagen schick ich dir noch, wie du aus dem Bauplan wirklich
-            <b>deine erste eigene App</b> machst. Halt die Augen offen. 👀</p>`
+    outro: `<p>Schau in Ruhe rein. Wenn du danach Lust hast, deine erste eigene App wirklich zu bauen,
+            findest du den ganzen Weg in der <a href="https://inner-goat.com/inner-goat-academy/" style="color:#FF5F00;font-weight:700">Inner GOAT Academy</a> –
+            oder antworte einfach auf diese Mail.</p>`
   }
 };
 
