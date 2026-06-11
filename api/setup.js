@@ -3,7 +3,12 @@ import { auth, SEED } from "./_lib.js";
 
 // GET /api/setup?key=PW  → create tables + seed the 8 links (run once)
 export default async function handler(req, res) {
-  if (!auth(req, res)) return;
+  // Zugang per ADMIN_PASSWORD ODER CRON_SECRET (beides starke Secrets) —
+  // erlaubt Migrationen auch ohne Klartext-Admin-Passwort.
+  const key = (req.query && req.query.key) || "";
+  const cron = process.env.CRON_SECRET || "";
+  const viaCron = cron.length > 0 && key === cron;
+  if (!viaCron && !auth(req, res)) return;
   await sql`CREATE TABLE IF NOT EXISTS links (
     id TEXT PRIMARY KEY, name TEXT, cta TEXT, destination TEXT, created TIMESTAMPTZ DEFAULT now())`;
   await sql`CREATE TABLE IF NOT EXISTS scans (
