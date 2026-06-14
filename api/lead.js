@@ -42,6 +42,23 @@ const CAMPAIGNS = {
     outro: `<p>Schau in Ruhe rein. Wenn du danach Lust hast, deine erste eigene App wirklich zu bauen,
             findest du den ganzen Weg in der <a href="https://inner-goat.com/inner-goat-academy/" style="color:#FF5F00;font-weight:700">Inner GOAT Academy</a> –
             oder antworte einfach auf diese Mail.</p>`
+  },
+  // Instagram "Die 25 Claude Skills, die dein Marketing-Team ersetzen"
+  skills: {
+    pdf: `${BASE}/goat-claude-skills.pdf`,
+    filename: "GOAT_Claude-Skills.pdf",
+    subject: "Deine 25 Claude Skills 🐐",
+    title: "Deine 25 Claude Skills sind da.",
+    body: (name) => `
+      <p>${hi(name)}</p>
+      <p>du willst Marketing-Arbeit an Claude abgeben – statt alles selbst zu machen?
+         Hier sind die <b>25 Skills, die dein Marketing-Team ersetzen</b> – plus die
+         Schritt-für-Schritt-Anleitung, wie du sie in Cowork einsetzt und eigene baust (6 Seiten):</p>`,
+    cta: { label: "📄 Die 25 Claude Skills öffnen", url: `${BASE}/goat-claude-skills.pdf` },
+    outro: `<p>Mein Tipp: Nimm dir nicht alle 25 auf einmal vor – sondern die 3, die dir am meisten Zeit fressen.
+            Wenn du dir dein eigenes Skill-Team bauen willst, zeig ich dir alles in der
+            <a href="https://inner-goat.com/inner-goat-academy/" style="color:#FF5F00;font-weight:700">Inner GOAT Academy</a> –
+            oder antworte einfach auf diese Mail.</p>`
   }
 };
 
