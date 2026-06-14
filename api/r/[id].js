@@ -85,9 +85,14 @@ export default async function handler(req, res) {
   // KEINE GPS-Zwischenseite: die Standort-Abfrage hängt in In-App-Browsern
   // (IG/TikTok) und blockiert die Weiterleitung. Sofort sauber 302 → öffnet
   // zuverlässig. Der Scan ist oben bereits geloggt (Tracking bleibt erhalten).
-  const funnelLink = (id && /^ig-/.test(id)) || /inner-goat-track\.vercel\.app/.test(dest);
+  const funnelLink = (id && /^ig-/.test(id)) || /inner-goat-track\.vercel\.app|go\.inner-goat\.com/.test(dest);
+  // Bei Funnel-Links host-RELATIV weiterleiten (nur Pfad), damit der Besucher auf
+  // der Domain bleibt, über die er kam (z.B. go.inner-goat.com) — sonst springt er
+  // zurück auf .vercel.app, das TikTok blockt.
+  let target = dest;
+  if (funnelLink) { try { const u = new URL(dest); target = u.pathname + u.search; } catch (e) { /* dest war schon relativ */ } }
   // Bots/Link-Vorschauen + Funnel-Links: sofort weiterleiten, keine GPS-Abfrage.
-  if (bot || !scanId || funnelLink) return redirect(res, dest);
+  if (bot || !scanId || funnelLink) return redirect(res, target);
   // Physische Sticker (Menschen): Zwischenseite mit GPS-Abfrage (leitet immer weiter).
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
   res.setHeader("Content-Type", "text/html; charset=utf-8");
