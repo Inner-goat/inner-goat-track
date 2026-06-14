@@ -52,8 +52,8 @@ const CAMPAIGNS = {
     body: (name) => `
       <p>${hi(name)}</p>
       <p>du willst Marketing-Arbeit an Claude abgeben – statt alles selbst zu machen?
-         Hier sind die <b>25 Skills, die dein Marketing-Team ersetzen</b> – plus die
-         Schritt-für-Schritt-Anleitung, wie du sie in Cowork einsetzt und eigene baust (6 Seiten):</p>`,
+         Hier sind die <b>25 Skills, die dein Marketing-Team ersetzen</b> – jeder mit
+         fertigem Prompt zum direkten Kopieren (12 Seiten, 7 Kategorien):</p>`,
     cta: { label: "📄 Die 25 Claude Skills öffnen", url: `${BASE}/goat-claude-skills.pdf` },
     outro: `<p>Mein Tipp: Nimm dir nicht alle 25 auf einmal vor – sondern die 3, die dir am meisten Zeit fressen.
             Wenn du dir dein eigenes Skill-Team bauen willst, zeig ich dir alles in der
