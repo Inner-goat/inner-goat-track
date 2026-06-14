@@ -1,10 +1,15 @@
 {
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/r/:id", "destination": "/api/r/:id" },
+    { "source": "/r/:id/", "destination": "/api/r/:id" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/ideen", "destination": "/ideen.html" },
+    { "source": "/ideen/", "destination": "/ideen.html" },
     { "source": "/ki", "destination": "/ki.html" },
-    { "source": "/skills", "destination": "/skills.html" }
+    { "source": "/ki/", "destination": "/ki.html" },
+    { "source": "/skills", "destination": "/skills.html" },
+    { "source": "/skills/", "destination": "/skills.html" }
   ]
 }
