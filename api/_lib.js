@@ -77,15 +77,18 @@ const IDEEN = "https://inner-goat-track.vercel.app/ideen"; // Klickpfad-Funnel (
 const KI    = "https://inner-goat-track.vercel.app/ki";     // Klickpfad-Funnel (Instagram "KI-App-Bauplan")
 const SKILLS= "https://inner-goat-track.vercel.app/skills"; // Klickpfad-Funnel (Instagram "25 Claude Skills")
 
+// Spalten: [id, name, cta, destination, typ, kampagne]
+//   typ      = "sticker" | "kampagne"  (für die Trennung im Dashboard)
+//   kampagne = Lead-Quelle (source), die dieser Link/Sticker speist (sonst null).
+//              Ein Sticker kann gleichzeitig eine Kampagne speisen (z.B. Ideenliste).
 export const SEED = [
-  // Aktuelle Serie (Juni 2026)
-  ["cards-zuhoeren",   "Du redest. Keiner hört dir zu",             "Storytelling Cards", CARDS],
-  ["yt-podcast",       "GOAT Mode ON · Podcast",                    "YouTube",            YT],
-  ["web-argument",     "Dein bestes Argument bist du",              "Website",            WEB],
-  ["academy-netzwerk", "Netzwerkst du noch oder verdienst du schon","Academy",            ACAD],
-  ["web-ideenliste",   "Deine Ideenliste ist unendlich",            "Website",            IDEEN],
-  // Instagram-Reel "Hör auf, teure App-Abos zu zahlen" (Juni 2026)
-  ["ig-ki",            "Hör auf, teure App-Abos zu zahlen",         "KI-Funnel",          KI],
-  // Instagram-Reel "25 Claude Skills, die dein Marketing-Team ersetzen" (Juni 2026)
-  ["ig-skills",        "25 Claude Skills, die dein Team ersetzen",  "Skills-Funnel",      SKILLS],
+  // ── Sticker (SuperReturn-Kampagne) ──────────────────────────────
+  ["cards-zuhoeren",   "Du redest. Keiner hört dir zu",             "Storytelling Cards", CARDS,  "sticker",  null],
+  ["yt-podcast",       "GOAT Mode ON · Podcast",                    "YouTube",            YT,     "sticker",  null],
+  ["web-argument",     "Dein bestes Argument bist du",              "Website",            WEB,    "sticker",  null],
+  ["academy-netzwerk", "Netzwerkst du noch oder verdienst du schon","Academy",            ACAD,   "sticker",  null],
+  ["web-ideenliste",   "Deine Ideenliste ist unendlich",            "Website",            IDEEN,  "sticker",  "ideen"],  // Sticker UND Kampagne
+  // ── Kampagnen (Instagram-Funnels, sammeln E-Mails) ──────────────
+  ["ig-ki",            "Hör auf, teure App-Abos zu zahlen",         "KI-Funnel",          KI,     "kampagne", "ki"],
+  ["ig-skills",        "25 Claude Skills, die dein Team ersetzen",  "Skills-Funnel",      SKILLS, "kampagne", "skills"],
 ];

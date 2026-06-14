@@ -11,6 +11,9 @@ export default async function handler(req, res) {
   if (!viaCron && !auth(req, res)) return;
   await sql`CREATE TABLE IF NOT EXISTS links (
     id TEXT PRIMARY KEY, name TEXT, cta TEXT, destination TEXT, created TIMESTAMPTZ DEFAULT now())`;
+  // Trennung Sticker ↔ Kampagne + welche Lead-Quelle ein Link speist.
+  await sql`ALTER TABLE links ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'sticker'`;
+  await sql`ALTER TABLE links ADD COLUMN IF NOT EXISTS campaign TEXT`;
   await sql`CREATE TABLE IF NOT EXISTS scans (
     id BIGSERIAL PRIMARY KEY, link_id TEXT, ts TIMESTAMPTZ,
     country TEXT, city TEXT, region TEXT, device TEXT, os TEXT, browser TEXT,
@@ -29,9 +32,12 @@ export default async function handler(req, res) {
   // Spalten nachrüsten: Name (Funnel fragt jetzt Vorname) + Followup-Tracking (Mail 2).
   await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS name TEXT`;
   await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS followup_sent BOOLEAN DEFAULT false`;
-  for (const [id, name, cta, dest] of SEED) {
-    await sql`INSERT INTO links (id, name, cta, destination) VALUES (${id}, ${name}, ${cta}, ${dest})
-              ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, cta=EXCLUDED.cta, destination=EXCLUDED.destination`;
+  for (const [id, name, cta, dest, type, campaign] of SEED) {
+    await sql`INSERT INTO links (id, name, cta, destination, type, campaign)
+              VALUES (${id}, ${name}, ${cta}, ${dest}, ${type || 'sticker'}, ${campaign || null})
+              ON CONFLICT (id) DO UPDATE SET
+                name=EXCLUDED.name, cta=EXCLUDED.cta, destination=EXCLUDED.destination,
+                type=EXCLUDED.type, campaign=EXCLUDED.campaign`;
   }
   // DB deklarativ an den SEED angleichen: Links entfernen, die nicht (mehr) im SEED stehen.
   const ids = SEED.map(s => s[0]);

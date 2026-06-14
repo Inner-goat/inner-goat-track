@@ -81,9 +81,14 @@ export default async function handler(req, res) {
   } catch (e) {
     // Logging darf den Redirect nie blockieren
   }
-  // Bots/Link-Vorschauen: sofort weiterleiten, keine GPS-Abfrage.
-  if (bot || !scanId) return redirect(res, dest);
-  // Menschen: Zwischenseite mit GPS-Abfrage (leitet immer weiter).
+  // Funnel-Links (Instagram/TikTok "ig-…" oder interne Funnel-Ziele) bekommen
+  // KEINE GPS-Zwischenseite: die Standort-Abfrage hängt in In-App-Browsern
+  // (IG/TikTok) und blockiert die Weiterleitung. Sofort sauber 302 → öffnet
+  // zuverlässig. Der Scan ist oben bereits geloggt (Tracking bleibt erhalten).
+  const funnelLink = (id && /^ig-/.test(id)) || /inner-goat-track\.vercel\.app/.test(dest);
+  // Bots/Link-Vorschauen + Funnel-Links: sofort weiterleiten, keine GPS-Abfrage.
+  if (bot || !scanId || funnelLink) return redirect(res, dest);
+  // Physische Sticker (Menschen): Zwischenseite mit GPS-Abfrage (leitet immer weiter).
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.status(200).send(interstitial(scanId, dest));

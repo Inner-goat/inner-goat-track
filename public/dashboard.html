@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Inner GOAT — Sticker Tracking</title>
+<title>GOAT Tracking</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 body{font-family:Poppins,Arial,sans-serif;background:#0E0E0E;color:#fff;margin:0;padding:26px;max-width:1040px;margin:0 auto}
@@ -12,21 +12,33 @@ h1{font-size:22px}.sub{opacity:.6;margin-top:-6px;font-size:14px}
 .num{font-size:56px;font-weight:800;color:#FF5F00;line-height:1}.lab{opacity:.6}
 h3{margin:0 0 10px}table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;opacity:.5;font-weight:600;padding:6px 4px}td{padding:6px 4px;border-top:1px solid #222;opacity:.9}
+h2.sec{font-size:16px;margin:26px 0 12px;border-left:4px solid #FF5F00;padding-left:10px}
+h2.sec span{opacity:.45;font-weight:400;font-size:13px}
+#campaigns td.big{font-size:18px;font-weight:800;color:#FF5F00}
+#campaigns .name{font-weight:700;opacity:1}
 @media(max-width:720px){.cards{grid-template-columns:1fr}}
 </style></head>
 <body>
-<h1><span class="dot"></span> Inner GOAT — Sticker Tracking</h1>
-<p class="sub">SuperReturn Berlin · live · <a href="/admin">Ziele bearbeiten</a> · <a href="#" onclick="location.reload()">↻ aktualisieren</a></p>
+<h1><span class="dot"></span> GOAT Tracking</h1>
+<p class="sub">Sticker &amp; Kampagnen · live · <a href="/admin">Ziele bearbeiten</a> · <a href="#" onclick="location.reload()">↻ aktualisieren</a></p>
 <div class="cards">
   <div class="card big"><div id="total" class="num">–</div><div class="lab">Scans gesamt</div>
     <div style="margin-top:10px"><span id="unique" style="font-size:26px;font-weight:800">–</span> <span class="lab">einzelne Personen</span></div>
     <div id="botnote" class="lab" style="font-size:12px;margin-top:6px"></div></div>
+  <div class="card big"><div id="leads" class="num">–</div><div class="lab">E-Mails gesammelt</div>
+    <div class="lab" style="font-size:12px;margin-top:6px">über alle Kampagnen-Funnels</div></div>
   <div class="card"><canvas id="device"></canvas></div>
-  <div class="card"><canvas id="os"></canvas></div>
 </div>
-<div class="card"><h3>Scans pro Sticker</h3><canvas id="links" height="170"></canvas></div>
+
+<h2 class="sec">🎯 Kampagnen <span>(Funnels — Scans &amp; E-Mails)</span></h2>
+<div class="card"><table id="campaigns"></table></div>
+
+<h2 class="sec">🏷️ Sticker <span>(Scans pro Motiv)</span></h2>
+<div class="card"><canvas id="links" height="170"></canvas></div>
+<h2 class="sec">📊 Alle Scans zusammen</h2>
 <div class="cards">
   <div class="card"><h3>Verlauf</h3><canvas id="day" height="150"></canvas></div>
+  <div class="card"><h3>OS</h3><canvas id="os" height="150"></canvas></div>
   <div class="card"><h3>Länder</h3><canvas id="country" height="150"></canvas></div>
   <div class="card"><h3>Städte</h3><canvas id="city" height="150"></canvas></div>
   <div class="card"><h3>Browser</h3><canvas id="browser" height="150"></canvas></div>
@@ -43,6 +55,11 @@ async function load(){
   const d=await res.json();
   total.textContent=d.total;
   document.getElementById('unique').textContent=d.unique ?? '–';
+  document.getElementById('leads').textContent=d.totalLeads ?? '–';
+  // Kampagnen-Tabelle: Name · Scans · E-Mails · Conversion
+  document.getElementById('campaigns').innerHTML=
+    '<tr><th>Kampagne</th><th>Scans</th><th>E-Mails</th><th>Conversion</th></tr>'+
+    (d.campaigns||[]).map(c=>`<tr><td class="name">${c.name}</td><td class="big">${c.scans}</td><td class="big">${c.leads}</td><td>${c.conv}%</td></tr>`).join('');
   document.getElementById('botnote').textContent=
     (d.gps ? `${d.gps} mit genauem GPS-Standort` : '') +
     (d.gps && d.bots ? ' · ' : '') +
@@ -51,12 +68,12 @@ async function load(){
     data:{labels:rows.map(x=>x.k||'—'),datasets:[{data:rows.map(x=>x.n),backgroundColor:P}]},
     options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10}},title:{display:true,text:t}}}});
   pie('device',d.byDevice,'Gerät'); pie('os',d.byOs,'OS');
-  new Chart(links,{type:'bar',data:{labels:d.links.map(x=>x.name),datasets:[{data:d.links.map(x=>x.n),backgroundColor:O}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
+  new Chart(links,{type:'bar',data:{labels:d.stickers.map(x=>x.name),datasets:[{data:d.stickers.map(x=>x.n),backgroundColor:O}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
   new Chart(day,{type:'line',data:{labels:d.byDay.map(x=>x.k),datasets:[{data:d.byDay.map(x=>x.n),borderColor:O,backgroundColor:'rgba(255,95,0,.15)',fill:true,tension:.3}]},options:{plugins:{legend:{display:false}}}});
   new Chart(country,{type:'bar',data:{labels:d.byCountry.map(x=>x.k),datasets:[{data:d.byCountry.map(x=>x.n),backgroundColor:'#0EA5E9'}]},options:{plugins:{legend:{display:false}}}});
   new Chart(city,{type:'bar',data:{labels:d.byCity.map(x=>x.k),datasets:[{data:d.byCity.map(x=>x.n),backgroundColor:'#22C55E'}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
   new Chart(browser,{type:'doughnut',data:{labels:d.byBrowser.map(x=>x.k),datasets:[{data:d.byBrowser.map(x=>x.n),backgroundColor:P}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10}}}}});
-  document.getElementById('recent').innerHTML='<tr><th>Zeit</th><th>Sticker</th><th>Gerät</th><th>OS</th><th>Ort</th><th>Genauer Standort</th></tr>'+
+  document.getElementById('recent').innerHTML='<tr><th>Zeit</th><th>Quelle</th><th>Gerät</th><th>OS</th><th>Ort</th><th>Genauer Standort</th></tr>'+
     d.recent.map(x=>{
       const gps = (x.lat!=null && x.lng!=null)
         ? `<a href="https://www.google.com/maps?q=${x.lat},${x.lng}" target="_blank" rel="noopener">📍 Karte${x.acc?` (±${x.acc} m)`:''}</a>`

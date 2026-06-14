@@ -11,9 +11,21 @@ export default async function handler(req, res) {
   const unique = (await sql`SELECT COUNT(DISTINCT visit_hash)::int c FROM scans WHERE is_bot=false AND visit_hash IS NOT NULL`).rows[0].c;
   const bots = (await sql`SELECT COUNT(*)::int c FROM scans WHERE is_bot=true`).rows[0].c;
   const links = await r(sql`
-    SELECT l.id, l.name, l.cta, l.destination, COUNT(s.id)::int n
+    SELECT l.id, l.name, l.cta, l.destination, l.type, l.campaign, COUNT(s.id)::int n
     FROM links l LEFT JOIN scans s ON s.link_id = l.id AND s.is_bot=false
-    GROUP BY l.id, l.name, l.cta, l.destination ORDER BY n DESC`);
+    GROUP BY l.id, l.name, l.cta, l.destination, l.type, l.campaign ORDER BY n DESC`);
+  // ── Trennung Sticker ↔ Kampagnen ──────────────────────────────
+  const stickers = links.filter(l => (l.type || 'sticker') === 'sticker');
+  const leadsBySource = await r(sql`SELECT source k, COUNT(*)::int n FROM leads GROUP BY source`);
+  const leadMap = Object.fromEntries(leadsBySource.map(x => [x.k, x.n]));
+  const totalLeads = (await sql`SELECT COUNT(*)::int c FROM leads`).rows[0].c;
+  // Eine Kampagne = jeder Link, der eine Lead-Quelle (campaign) speist.
+  // Scans = Scans dieses Links; E-Mails = Leads mit source=campaign.
+  const campaigns = links.filter(l => l.campaign).map(l => {
+    const leads = leadMap[l.campaign] || 0;
+    return { id: l.campaign, name: l.name, scans: l.n, leads,
+             conv: l.n ? Math.round((leads / l.n) * 100) : 0 };
+  }).sort((a, b) => b.leads - a.leads);
   const byCta = await r(sql`SELECT l.cta k, COUNT(*)::int n FROM scans s JOIN links l ON l.id=s.link_id WHERE s.is_bot=false GROUP BY l.cta ORDER BY n DESC`);
   const byDevice = await r(sql`SELECT device k, COUNT(*)::int n FROM scans WHERE is_bot=false GROUP BY device ORDER BY n DESC`);
   const byOs = await r(sql`SELECT os k, COUNT(*)::int n FROM scans WHERE is_bot=false GROUP BY os ORDER BY n DESC`);
@@ -25,5 +37,5 @@ export default async function handler(req, res) {
     SELECT to_char(s.ts AT TIME ZONE 'Europe/Berlin','YYYY-MM-DD HH24:MI') ts, l.name, s.device, s.os, s.browser, s.country, s.city, s.lat, s.lng, s.acc
     FROM scans s JOIN links l ON l.id=s.link_id WHERE s.is_bot=false ORDER BY s.id DESC LIMIT 50`);
   const gps = (await sql`SELECT COUNT(*)::int c FROM scans WHERE is_bot=false AND lat IS NOT NULL`).rows[0].c;
-  res.json({ total, unique, bots, gps, links, byCta, byDevice, byOs, byBrowser, byCountry, byCity, byDay, recent });
+  res.json({ total, unique, bots, gps, totalLeads, links, stickers, campaigns, byCta, byDevice, byOs, byBrowser, byCountry, byCity, byDay, recent });
 }
