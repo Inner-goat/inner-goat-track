@@ -59,6 +59,22 @@ const CAMPAIGNS = {
             Wenn du dir dein eigenes Skill-Team bauen willst, zeig ich dir alles in der
             <a href="https://inner-goat.com/inner-goat-academy/" style="color:#FF5F00;font-weight:700">Inner GOAT Academy</a> –
             oder antworte einfach auf diese Mail.</p>`
+  },
+  // Instagram/LinkedIn "Nie wieder nur von Empfehlungen leben" → Empfehlungs-Skript
+  empfehlung: {
+    pdf: `${BASE}/goat-empfehlungs-skript.pdf`,
+    filename: "GOAT_Empfehlungs-Skript.pdf",
+    subject: "Dein Empfehlungs-Skript ist da 🐐",
+    title: "Dein Empfehlungs-Skript ist da.",
+    body: (name) => `
+      <p>${hi(name)}</p>
+      <p>du willst Kunden, die <b>von selbst</b> kommen – ohne Kaltakquise und ohne auf Zufalls-Empfehlungen zu warten?
+         Hier ist das Skript: die exakten Fragen, Vorlagen &amp; dein Erinnerungs-Rhythmus, mit denen aus Zufall ein System wird:</p>`,
+    cta: { label: "📄 Empfehlungs-Skript öffnen", url: `${BASE}/goat-empfehlungs-skript.pdf` },
+    outro: `<p>Mein Tipp: Lies <b>Seite 3</b> zuerst – die „Von 1 bis 10"-Frage änderst du heute noch.
+            Und wenn du den ganzen Weg willst (deine Story, Personal Branding, Sales), zeig ich ihn dir in der
+            <a href="https://inner-goat.com/inner-goat-academy/" style="color:#FF5F00;font-weight:700">Inner GOAT Academy</a> –
+            oder antworte einfach auf diese Mail.</p>`
   }
 };
 
@@ -121,6 +137,19 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(500).json({ error: "db" });
   }
+
+  // Lead an GOAT Flow weiterreichen (Kontakt + Liste + Sequenz-Enrollment).
+  // Fire-and-forget: darf das Lead-Speichern + die PDF-Mail NIE blockieren.
+  try {
+    if (process.env.GOATFLOW_INGEST_URL && process.env.INGEST_API_KEY) {
+      fetch(process.env.GOATFLOW_INGEST_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.INGEST_API_KEY}` },
+        body: JSON.stringify({ email: mail, name: nm, campaign: src }),
+      }).catch(() => {});
+    }
+  } catch { /* ignore */ }
+
   let mailResult = { sent: false };
   try { mailResult = await sendMail(mail, campaign, nm); } catch (e) { /* Lead ist gespeichert, Mail nicht blockierend */ }
   res.json({ ok: true, mailed: mailResult.sent });

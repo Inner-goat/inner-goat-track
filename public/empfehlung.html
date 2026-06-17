@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deine Ideenliste ist unendlich — Inner GOAT</title>
+<title>Nie wieder nur von Empfehlungen leben — Inner GOAT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
@@ -49,38 +49,38 @@
 
   <!-- 1 HOOK -->
   <section class="screen on" id="s1">
-    <h1>Deine Ideenliste ist <span class="hl">unendlich</span>.<br>Deine Zeit nicht.</h1>
-    <p class="sub">In 60 Sekunden zeig ich dir, welche Idee du <b>zuerst</b> angehst — und wie du aus „too many ideas" Ergebnisse machst. 🐐</p>
-    <button onclick="go(2)">Los geht's →</button>
+    <h1>Nie wieder nur von <span class="hl">Empfehlungen</span> leben.</h1>
+    <p class="sub">Empfehlungen sind das beste Marketing – aber sie kommen, wann sie wollen. Ich zeig dir das Skript, mit dem aus Zufall ein System wird. Ohne Kaltakquise. 🐐</p>
+    <button onclick="go(2)">Zeig mir das Skript →</button>
   </section>
 
   <!-- 2 FRAGE -->
   <section class="screen" id="s2">
-    <h1>Mal ehrlich:</h1>
-    <p class="sub">Wie viele Ideen warten gerade auf Umsetzung?</p>
-    <button class="opt" onclick="pick('1–5')">1–5 — überschaubar</button>
-    <button class="opt" onclick="pick('6–20')">6–20 — wird langsam viel</button>
-    <button class="opt" onclick="pick('20+')">20+ — totales Ideen-Chaos</button>
+    <h1>Kurz vorweg:</h1>
+    <p class="sub">Wie kommst du gerade an neue Kunden?</p>
+    <button class="opt" onclick="pick('nur Empfehlungen')">Fast nur über Empfehlungen</button>
+    <button class="opt" onclick="pick('Netzwerk')">Netzwerk &amp; Weiterempfehlung</button>
+    <button class="opt" onclick="pick('kein System')">Ehrlich? Kein echtes System</button>
   </section>
 
-  <!-- 3 EMAIL -->
+  <!-- 3 NAME + EMAIL -->
   <section class="screen" id="s3">
-    <h1>Hol dir die <span class="hl">GOAT Ideen-Priorisierung</span></h1>
-    <p class="sub">Die 1-Seiten-Matrix, mit der du in 5 Minuten weißt, welche Idee zuerst dran ist.</p>
-    <div class="magnet"><div class="ic">📄</div><div><b>GOAT Ideen-Priorisierung (PDF)</b><span>Impact × Aufwand · 1 Seite · sofort nutzbar</span></div></div>
+    <h1>Hol dir das <span class="hl">Empfehlungs-Skript</span></h1>
+    <p class="sub">Die exakten Fragen (inkl. der „Von 1 bis 10"-Frage), LinkedIn-Vorlage &amp; dein Erinnerungs-Rhythmus. Schick ich dir sofort als PDF.</p>
+    <div class="magnet"><div class="ic">📄</div><div><b>Das Empfehlungs-Skript (PDF)</b><span>Fragen · Vorlagen · Erinnerungs-System · 6 Seiten</span></div></div>
     <div class="err" id="err"></div>
     <input type="text" id="name" placeholder="Dein Vorname" autocomplete="given-name">
     <input type="email" id="email" placeholder="deine@email.de" autocomplete="email" inputmode="email">
-    <button id="submit" onclick="submit()">Schick mir die Matrix →</button>
-    <div class="fine">Kein Spam. Du bekommst die Matrix + ab und zu echte GOAT-Tipps. Abmeldung jederzeit.</div>
+    <button id="submit" onclick="submit()">Schick mir das Skript →</button>
+    <div class="fine">Kein Spam. Du bekommst das Skript + ab und zu echte GOAT-Tipps. Abmeldung jederzeit.</div>
   </section>
 
   <!-- 4 DANKE + ANGEBOT -->
   <section class="screen" id="s4">
     <h1>Stark. Check deine <span class="hl">Mailbox</span> 🐐</h1>
-    <p class="sub">Die Ideen-Priorisierung ist unterwegs zu dir. Während du wartest:</p>
-    <div class="magnet"><div class="ic">🃏</div><div><b>Aus Ideen werden Ergebnisse</b><span>Das Tool, mit dem du Ideen sofort umsetzt</span></div></div>
-    <a class="btn" id="offer" href="https://inner-goat.com/storytelling-app/">So setzt du sie um → Storytelling Cards</a>
+    <p class="sub">Dein Empfehlungs-Skript ist unterwegs. Der größere Hebel? Deine <b>eigene Geschichte</b> erzählen können – das macht dich überhaupt erst empfehlenswert:</p>
+    <div class="magnet"><div class="ic">🎯</div><div><b>Story, Personal Branding &amp; Sales</b><span>Schritt für Schritt – von Gründern für Gründer</span></div></div>
+    <a class="btn" id="offer" href="https://inner-goat.com/inner-goat-academy/">Zur Inner GOAT Academy →</a>
     <a class="btn ghost" href="https://inner-goat.com/">Mehr über Inner GOAT</a>
   </section>
 </div>
@@ -99,15 +99,15 @@ async function submit(){
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent = "Bitte gib eine gültige E-Mail ein."; el.focus(); return; }
   err.textContent = ""; btn.disabled = true; btn.textContent = "Sekunde …";
   try{
-    const r = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, name, source:'ideen', answer})});
+    const r = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, name, source:'empfehlung', answer})});
     if(!r.ok) throw new Error();
     show(4);
   }catch(e){
-    err.textContent = "Hat nicht geklappt — bitte nochmal."; btn.disabled = false; btn.textContent = "Schick mir die Matrix →";
+    err.textContent = "Hat nicht geklappt — bitte nochmal."; btn.disabled = false; btn.textContent = "Schick mir das Skript →";
   }
 }
-document.getElementById('name').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('email').focus(); });
 document.getElementById('email').addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+document.getElementById('name').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('email').focus(); });
 </script>
 </body>
 </html>

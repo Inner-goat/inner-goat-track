@@ -1,5 +1,8 @@
 {
   "trailingSlash": false,
+  "crons": [
+    { "path": "/api/sync-to-flow", "schedule": "0 8 * * *" }
+  ],
   "rewrites": [
     { "source": "/r/:id", "destination": "/api/r/:id" },
     { "source": "/r/:id/", "destination": "/api/r/:id" },
@@ -10,6 +13,8 @@
     { "source": "/ki", "destination": "/ki.html" },
     { "source": "/ki/", "destination": "/ki.html" },
     { "source": "/skills", "destination": "/skills.html" },
-    { "source": "/skills/", "destination": "/skills.html" }
+    { "source": "/skills/", "destination": "/skills.html" },
+    { "source": "/empfehlung", "destination": "/empfehlung.html" },
+    { "source": "/empfehlung/", "destination": "/empfehlung.html" }
   ]
 }
