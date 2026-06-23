@@ -94,6 +94,8 @@ export const SEED = [
   ["ig-ki",            "Hör auf, teure App-Abos zu zahlen",         "KI-Funnel",          KI,     "kampagne", "ki"],
   ["ig-skills",        "25 Claude Skills, die dein Team ersetzen",  "Skills-Funnel",      SKILLS, "kampagne", "skills"],
   ["ig-empfehlung",    "Nie wieder nur von Empfehlungen leben",     "Empfehlungs-Funnel", EMPF,   "kampagne", "empfehlung"],
-  // ── Branded Redirects (digital, kein Lead-Sammeln hier) ─────────
-  ["ritter",           "Welcher Gründer-Typ bist du? (Ritter-Test)","Quiz",               RITTER, "kampagne", null],
+  // ── Branded Redirects (digital) ─────────────────────────────────
+  // Ritter-Test = Kampagne (taucht im Dashboard auf). Leads werden im
+  // Storybuilder-Quiz selbst gesammelt, nicht hier → E-Mails-Spalte bleibt 0.
+  ["ritter",           "Welcher Gründer-Typ bist du? (Ritter-Test)","Quiz",               RITTER, "kampagne", "ritter"],
 ];
