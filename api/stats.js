@@ -19,12 +19,19 @@ export default async function handler(req, res) {
   const leadsBySource = await r(sql`SELECT source k, COUNT(*)::int n FROM leads GROUP BY source`);
   const leadMap = Object.fromEntries(leadsBySource.map(x => [x.k, x.n]));
   const totalLeads = (await sql`SELECT COUNT(*)::int c FROM leads`).rows[0].c;
-  // Eine Kampagne = jeder Link, der eine Lead-Quelle (campaign) speist.
-  // Scans = Scans dieses Links; E-Mails = Leads mit source=campaign.
-  const campaigns = links.filter(l => l.campaign).map(l => {
-    const leads = leadMap[l.campaign] || 0;
-    return { id: l.campaign, name: l.name, scans: l.n, leads,
-             conv: l.n ? Math.round((leads / l.n) * 100) : 0 };
+  // Kampagnen = alle Lead-Quellen ∪ alle Links mit campaign-Feld.
+  // So erscheint jede Kampagne, sobald sie Leads ODER einen Tracking-Link hat.
+  const campLink = Object.fromEntries(links.filter(l => l.campaign).map(l => [l.campaign, l]));
+  const NAMES = { ideen: "Ideenliste", ki: "Hör auf, teure App-Abos zu zahlen",
+                  skills: "25 Claude Skills, die dein Team ersetzen",
+                  empfehlung: "Nie wieder nur von Empfehlungen leben" };
+  const campIds = [...new Set([...Object.keys(campLink), ...leadsBySource.map(x => x.k)])].filter(Boolean);
+  const campaigns = campIds.map(id => {
+    const l = campLink[id];
+    const scans = l ? l.n : 0;
+    const leads = leadMap[id] || 0;
+    return { id, name: (l && l.name) || NAMES[id] || id, scans, leads,
+             conv: scans ? Math.round((leads / scans) * 100) : 0 };
   }).sort((a, b) => b.leads - a.leads);
   const byCta = await r(sql`SELECT l.cta k, COUNT(*)::int n FROM scans s JOIN links l ON l.id=s.link_id WHERE s.is_bot=false GROUP BY l.cta ORDER BY n DESC`);
   const byDevice = await r(sql`SELECT device k, COUNT(*)::int n FROM scans WHERE is_bot=false GROUP BY device ORDER BY n DESC`);

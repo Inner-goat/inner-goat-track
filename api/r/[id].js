@@ -61,12 +61,14 @@ function interstitial(scanId, dest) {
 export default async function handler(req, res) {
   const id = req.query.id;
   let dest = "https://www.inner-goat.com";
+  let destType = "sticker";
   let scanId = null;
   const ua = req.headers["user-agent"] || "";
   const bot = isBot(ua);
   try {
-    const { rows } = await sql`SELECT destination FROM links WHERE id=${id}`;
+    const { rows } = await sql`SELECT destination, type FROM links WHERE id=${id}`;
     if (rows[0] && rows[0].destination) dest = rows[0].destination;
+    if (rows[0] && rows[0].type) destType = rows[0].type;
     const d = parseUA(ua);
     const g = geo(req);
     const ins = await sql`
@@ -91,8 +93,10 @@ export default async function handler(req, res) {
   // zurück auf .vercel.app, das TikTok blockt.
   let target = dest;
   if (funnelLink) { try { const u = new URL(dest); target = u.pathname + u.search; } catch (e) { /* dest war schon relativ */ } }
-  // Bots/Link-Vorschauen + Funnel-Links: sofort weiterleiten, keine GPS-Abfrage.
-  if (bot || !scanId || funnelLink) return redirect(res, target);
+  // GPS-Zwischenseite NUR für physische Sticker (type='sticker'). Alle digitalen
+  // Links (Kampagnen, Quiz/Ritter-Test …) leiten sofort sauber weiter — die
+  // GPS-Abfrage hängt in In-App-Browsern und bringt bei digitalem Traffic nichts.
+  if (bot || !scanId || funnelLink || destType !== "sticker") return redirect(res, target);
   // Physische Sticker (Menschen): Zwischenseite mit GPS-Abfrage (leitet immer weiter).
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
   res.setHeader("Content-Type", "text/html; charset=utf-8");

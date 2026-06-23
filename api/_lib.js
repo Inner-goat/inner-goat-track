@@ -76,6 +76,8 @@ const YT    = "https://www.youtube.com/watch?v=J9Ljgx-6I2o";
 const IDEEN = "https://inner-goat-track.vercel.app/ideen"; // Klickpfad-Funnel (Sticker "Ideenliste")
 const KI    = "https://inner-goat-track.vercel.app/ki";     // Klickpfad-Funnel (Instagram "KI-App-Bauplan")
 const SKILLS= "https://inner-goat-track.vercel.app/skills"; // Klickpfad-Funnel (Instagram "25 Claude Skills")
+const EMPF  = "https://inner-goat-track.vercel.app/empfehlung"; // Funnel "Nie wieder nur von Empfehlungen leben"
+const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Ritter-Persönlichkeitstest (Storybuilder-Quiz)
 
 // Spalten: [id, name, cta, destination, typ, kampagne]
 //   typ      = "sticker" | "kampagne"  (für die Trennung im Dashboard)
@@ -91,4 +93,7 @@ export const SEED = [
   // ── Kampagnen (Instagram-Funnels, sammeln E-Mails) ──────────────
   ["ig-ki",            "Hör auf, teure App-Abos zu zahlen",         "KI-Funnel",          KI,     "kampagne", "ki"],
   ["ig-skills",        "25 Claude Skills, die dein Team ersetzen",  "Skills-Funnel",      SKILLS, "kampagne", "skills"],
+  ["ig-empfehlung",    "Nie wieder nur von Empfehlungen leben",     "Empfehlungs-Funnel", EMPF,   "kampagne", "empfehlung"],
+  // ── Branded Redirects (digital, kein Lead-Sammeln hier) ─────────
+  ["ritter",           "Welcher Gründer-Typ bist du? (Ritter-Test)","Quiz",               RITTER, "kampagne", null],
 ];
