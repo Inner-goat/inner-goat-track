@@ -1,6 +1,24 @@
 import { sql } from "@vercel/postgres";
 import { auth } from "./_lib.js";
 
+// Leads aus der Quiz-App (Storytelling Cards, Supabase) pro `source` zählen.
+// Diese Leads liegen NICHT in unserer Neon-DB, sondern in der Quiz-Supabase
+// (z.B. Kampagne "ritter"). Fehlertolerant: bei Problemen leeres Ergebnis.
+async function quizLeadCounts() {
+  const url = process.env.QUIZ_SUPABASE_URL, key = process.env.QUIZ_SUPABASE_KEY;
+  if (!url || !key) return {};
+  try {
+    const resp = await fetch(`${url}/rest/v1/leads?select=source&limit=100000`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` }
+    });
+    if (!resp.ok) return {};
+    const rows = await resp.json();
+    const m = {};
+    for (const x of rows) { const s = x && x.source; if (s) m[s] = (m[s] || 0) + 1; }
+    return m;
+  } catch { return {}; }
+}
+
 // GET /api/stats?key=PW  → aggregated JSON for the dashboard
 export default async function handler(req, res) {
   if (!auth(req, res)) return;
@@ -18,21 +36,27 @@ export default async function handler(req, res) {
   const stickers = links.filter(l => (l.type || 'sticker') === 'sticker');
   const leadsBySource = await r(sql`SELECT source k, COUNT(*)::int n FROM leads GROUP BY source`);
   const leadMap = Object.fromEntries(leadsBySource.map(x => [x.k, x.n]));
-  const totalLeads = (await sql`SELECT COUNT(*)::int c FROM leads`).rows[0].c;
+  const neonTotal = (await sql`SELECT COUNT(*)::int c FROM leads`).rows[0].c;
+  const quizMap = await quizLeadCounts(); // E-Mails aus der Quiz-Supabase (z.B. ritter)
+  // Gesamt-E-Mails einer Kampagne = eigene Neon-Leads + Quiz-Leads (disjunkt).
+  const leadsFor = (id) => (leadMap[id] || 0) + (quizMap[id] || 0);
   // Kampagnen = alle Lead-Quellen ∪ alle Links mit campaign-Feld.
   // So erscheint jede Kampagne, sobald sie Leads ODER einen Tracking-Link hat.
   const campLink = Object.fromEntries(links.filter(l => l.campaign).map(l => [l.campaign, l]));
   const NAMES = { ideen: "Ideenliste", ki: "Hör auf, teure App-Abos zu zahlen",
                   skills: "25 Claude Skills, die dein Team ersetzen",
-                  empfehlung: "Nie wieder nur von Empfehlungen leben" };
+                  empfehlung: "Nie wieder nur von Empfehlungen leben",
+                  ritter: "Welcher Gründer-Typ bist du? (Ritter-Test)" };
   const campIds = [...new Set([...Object.keys(campLink), ...leadsBySource.map(x => x.k)])].filter(Boolean);
   const campaigns = campIds.map(id => {
     const l = campLink[id];
     const scans = l ? l.n : 0;
-    const leads = leadMap[id] || 0;
+    const leads = leadsFor(id);
     return { id, name: (l && l.name) || NAMES[id] || id, scans, leads,
              conv: scans ? Math.round((leads / scans) * 100) : 0 };
   }).sort((a, b) => b.leads - a.leads);
+  // Gesamt-E-Mails = Neon + Quiz-Leads unserer Kampagnen (nicht quiz-fremde Quellen).
+  const totalLeads = neonTotal + campIds.reduce((a, id) => a + (quizMap[id] || 0), 0);
   const byCta = await r(sql`SELECT l.cta k, COUNT(*)::int n FROM scans s JOIN links l ON l.id=s.link_id WHERE s.is_bot=false GROUP BY l.cta ORDER BY n DESC`);
   const byDevice = await r(sql`SELECT device k, COUNT(*)::int n FROM scans WHERE is_bot=false GROUP BY device ORDER BY n DESC`);
   const byOs = await r(sql`SELECT os k, COUNT(*)::int n FROM scans WHERE is_bot=false GROUP BY os ORDER BY n DESC`);
