@@ -19,6 +19,31 @@ async function quizLeadCounts() {
   } catch { return {}; }
 }
 
+// App-Gesamtübersicht aus der Quiz-Supabase: App-Nutzer (users), Newsletter,
+// und die GESAMTZAHL eindeutiger E-Mails über alle Quellen (Neon-Funnels ∪
+// App-Nutzer ∪ Quiz-Leads ∪ Newsletter). Fehlertolerant.
+async function appOverview(neonEmails) {
+  const out = { appUsers: null, newsletter: null, emailsUnique: null };
+  const url = process.env.QUIZ_SUPABASE_URL, key = process.env.QUIZ_SUPABASE_KEY;
+  if (!url || !key) return out;
+  try {
+    const h = { apikey: key, Authorization: `Bearer ${key}` };
+    const j = async (p) => (await fetch(`${url}/rest/v1/${p}`, { headers: h })).json();
+    const [users, qleads, news] = await Promise.all([
+      j("users?select=email"), j("leads?select=email"), j("newsletter_subscribers?select=email")
+    ]);
+    out.appUsers = users.length;
+    out.newsletter = news.length;
+    const set = new Set(neonEmails.map(e => (e || "").toLowerCase().trim()).filter(Boolean));
+    for (const r of [...users, ...qleads, ...news]) {
+      const e = (r && r.email || "").toLowerCase().trim();
+      if (e) set.add(e);
+    }
+    out.emailsUnique = set.size;
+  } catch { /* fällt auf null zurück */ }
+  return out;
+}
+
 // GET /api/stats?key=PW  → aggregated JSON for the dashboard
 export default async function handler(req, res) {
   if (!auth(req, res)) return;
@@ -37,7 +62,9 @@ export default async function handler(req, res) {
   const leadsBySource = await r(sql`SELECT source k, COUNT(*)::int n FROM leads GROUP BY source`);
   const leadMap = Object.fromEntries(leadsBySource.map(x => [x.k, x.n]));
   const neonTotal = (await sql`SELECT COUNT(*)::int c FROM leads`).rows[0].c;
+  const neonEmails = (await r(sql`SELECT email FROM leads`)).map(x => x.email).filter(Boolean);
   const quizMap = await quizLeadCounts(); // E-Mails aus der Quiz-Supabase (z.B. ritter)
+  const app = await appOverview(neonEmails); // App-Nutzer + E-Mails gesamt (alle Quellen)
   // Gesamt-E-Mails einer Kampagne = eigene Neon-Leads + Quiz-Leads (disjunkt).
   const leadsFor = (id) => (leadMap[id] || 0) + (quizMap[id] || 0);
   // Kampagnen = alle Lead-Quellen ∪ alle Links mit campaign-Feld.
@@ -68,5 +95,5 @@ export default async function handler(req, res) {
     SELECT to_char(s.ts AT TIME ZONE 'Europe/Berlin','YYYY-MM-DD HH24:MI') ts, l.name, s.device, s.os, s.browser, s.country, s.city, s.lat, s.lng, s.acc
     FROM scans s JOIN links l ON l.id=s.link_id WHERE s.is_bot=false ORDER BY s.id DESC LIMIT 50`);
   const gps = (await sql`SELECT COUNT(*)::int c FROM scans WHERE is_bot=false AND lat IS NOT NULL`).rows[0].c;
-  res.json({ total, unique, bots, gps, totalLeads, links, stickers, campaigns, byCta, byDevice, byOs, byBrowser, byCountry, byCity, byDay, recent });
+  res.json({ total, unique, bots, gps, totalLeads, app, links, stickers, campaigns, byCta, byDevice, byOs, byBrowser, byCountry, byCity, byDay, recent });
 }

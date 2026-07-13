@@ -30,6 +30,13 @@ h2.sec span{opacity:.45;font-weight:400;font-size:13px}
   <div class="card"><canvas id="device"></canvas></div>
 </div>
 
+<h2 class="sec">📇 Gesamt-Übersicht <span>(alle Quellen zusammen)</span></h2>
+<div class="cards">
+  <div class="card big"><div id="appUsers" class="num">–</div><div class="lab">App-Nutzer / Kunden</div></div>
+  <div class="card big"><div id="emailsUnique" class="num">–</div><div class="lab">E-Mails gesamt (eindeutig)</div></div>
+  <div class="card big"><div id="newsletter" class="num">–</div><div class="lab">Newsletter-Abos</div></div>
+</div>
+
 <h2 class="sec">🎯 Kampagnen <span>(Funnels — Scans &amp; E-Mails)</span></h2>
 <div class="card"><table id="campaigns"></table></div>
 
@@ -56,6 +63,10 @@ async function load(){
   total.textContent=d.total;
   document.getElementById('unique').textContent=d.unique ?? '–';
   document.getElementById('leads').textContent=d.totalLeads ?? '–';
+  const app=d.app||{};
+  document.getElementById('appUsers').textContent=app.appUsers ?? '–';
+  document.getElementById('emailsUnique').textContent=app.emailsUnique ?? '–';
+  document.getElementById('newsletter').textContent=app.newsletter ?? '–';
   // Kampagnen-Tabelle: Name · Scans · E-Mails · Conversion
   document.getElementById('campaigns').innerHTML=
     '<tr><th>Kampagne</th><th>Scans</th><th>E-Mails</th><th>Conversion</th></tr>'+
