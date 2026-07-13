@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 GOAT Skills für Claude — Inner GOAT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--o:#FF5F00;--bg:#0E0E0E;--card:#171717;--line:#2a2a2a;--wa:#25D366}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{font-family:Poppins,Arial,sans-serif;background:radial-gradient(1100px 520px at 50% -10%,#2a1400,var(--bg));color:#fff;display:flex;align-items:center;justify-content:center;padding:22px}
+  .wrap{width:100%;max-width:480px}
+  .goat{width:48px;margin:0 auto 16px;display:block}
+  .badge{display:inline-block;background:rgba(255,95,0,.15);color:var(--o);font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;margin-bottom:14px}
+  h1{font-size:29px;font-weight:900;line-height:1.12;margin-bottom:10px;text-align:center}
+  h1 .hl{color:var(--o)}
+  p.sub{opacity:.8;font-size:15px;line-height:1.55;margin-bottom:20px;text-align:center}
+  .skill{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 15px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+  .skill .ic{font-size:22px}
+  .skill b{display:block;font-size:14px}.skill span{font-size:12px;opacity:.65;line-height:1.45}
+  label{display:block;font-size:12px;font-weight:600;opacity:.7;margin:14px 0 6px}
+  input{width:100%;padding:15px;border-radius:13px;border:1px solid var(--line);background:#0e0e0e;color:#fff;font-family:inherit;font-size:16px}
+  input:focus{outline:0;border-color:var(--o)}
+  button,.btn{width:100%;display:block;text-align:center;text-decoration:none;background:var(--o);color:#fff;border:0;border-radius:14px;padding:16px;font-family:inherit;font-weight:800;font-size:16px;cursor:pointer;margin-top:12px;transition:.15s}
+  button:hover,.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,95,0,.35)}
+  .wa{background:var(--wa);color:#062e14}.wa:hover{box-shadow:0 10px 30px rgba(37,211,102,.3)}
+  .ghost{background:transparent;border:1px solid var(--line);color:#fff;font-weight:600}
+  .err{color:#ff7a7a;font-size:13px;min-height:16px;margin-top:8px;text-align:center}
+  .fine{font-size:11px;opacity:.45;text-align:center;margin-top:12px;line-height:1.5}
+  .or{text-align:center;opacity:.4;font-size:12px;margin:18px 0 4px}
+  .screen{display:none}.screen.on{display:block;animation:in .35s ease}
+  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg class="goat" viewBox="0 0 215 183" xmlns="http://www.w3.org/2000/svg"><g fill="#FF5F00">
+    <path d="M159.5,182.9h-49.5c0-28.7,3.3-58.4,27-81.2,23.4-22.5,53.7-25.6,83-25.6v49.5c-30.4,0-41.1,4.5-48.7,11.7-7.3,7-11.8,17.1-11.8,45.5Z"/>
+    <path d="M110,182.9h-49.5c0-28.5-4.5-38.5-11.8-45.5-7.5-7.2-18.3-11.7-48.7-11.7v-49.5c29.3,0,59.7,3.1,83,25.6,23.7,22.8,27,52.5,27,81.2Z"/>
+    <path d="M110,87.9c-42.5,0-73.8-25.4-101.3-52.9L43.8,0c28,28,45.9,38.4,66.3,38.4S148.3,28,176.3,0l35,35c-18,18-32.6,29.8-47.3,38.1-17.5,9.9-35.2,14.8-54,14.8Z"/>
+  </g></svg>
+
+  <!-- FORM -->
+  <section class="screen on" id="s1">
+    <div style="text-align:center"><span class="badge">🎁 Gratis · 3 fertige Claude-Skills</span></div>
+    <h1>Mach Claude zu deinem <span class="hl">GOAT-Team.</span></h1>
+    <p class="sub">3 installierbare Skills, mit denen Claude verkauft, erzählt und mitdenkt wie wir. Kostenlos — komplett zum Nachbauen.</p>
+
+    <div class="skill"><div class="ic">🔥</div><div><b>GOAT Storytelling</b><span>Deine Founder-Story, die verkauft — nach „Art of Breaking Yourself".</span></div></div>
+    <div class="skill"><div class="ic">🤝</div><div><b>GOAT Sales</b><span>Verkaufen mit Haltung statt Druck.</span></div></div>
+    <div class="skill"><div class="ic">🐐</div><div><b>GOAT Mentor</b><span>Dein Sparringspartner für Gründer-Entscheidungen.</span></div></div>
+
+    <label>Dein Vorname</label>
+    <input id="name" type="text" placeholder="Vorname" autocomplete="given-name">
+    <label>Deine E-Mail (dahin schicken wir die Skills)</label>
+    <input id="email" type="email" placeholder="deine@email.de" autocomplete="email" inputmode="email">
+    <div class="err" id="err"></div>
+    <button id="submit" onclick="submit()">Schick mir die 3 GOAT Skills →</button>
+    <div class="fine">Kostenlos. Du bekommst die 3 Skill-Dateien + ab und zu echte GOAT-Tipps. Abmeldung jederzeit.</div>
+
+    <div class="or">— oder —</div>
+    <a class="btn wa" href="https://chat.whatsapp.com/IS7EBv5Y2BwCEuXYT3QRs2">👋 Komm in die GOAT-Community</a>
+  </section>
+
+  <!-- DANKE -->
+  <section class="screen" id="s2">
+    <div style="text-align:center"><span class="badge">✅ Unterwegs zu dir</span></div>
+    <h1>Check deine <span class="hl">Mailbox 🐐</span></h1>
+    <p class="sub">Die 3 GOAT Skills liegen als Dateien in deiner Mail — mit Kurz-Anleitung, wie du sie in Claude installierst.</p>
+    <a class="btn" href="https://inner-goat.com/inner-goat-academy/">Inner GOAT Academy ansehen</a>
+    <a class="btn wa" href="https://chat.whatsapp.com/IS7EBv5Y2BwCEuXYT3QRs2">👋 In die GOAT-Community</a>
+  </section>
+</div>
+
+<script>
+async function submit(){
+  const nm=document.getElementById('name').value.trim();
+  const el=document.getElementById('email'), err=document.getElementById('err'), btn=document.getElementById('submit');
+  const email=el.value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent="Bitte gib eine gültige E-Mail ein."; el.focus(); return; }
+  err.textContent=""; btn.disabled=true; btn.textContent="Sekunde …";
+  try{
+    const r=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,name:nm,source:'goatskill'})});
+    if(!r.ok) throw new Error();
+    document.getElementById('s1').classList.remove('on');
+    document.getElementById('s2').classList.add('on'); window.scrollTo(0,0);
+  }catch(e){ err.textContent="Hat nicht geklappt — bitte nochmal."; btn.disabled=false; btn.textContent="Schick mir die 3 GOAT Skills →"; }
+}
+document.getElementById('email').addEventListener('keydown',e=>{ if(e.key==='Enter') submit(); });
+</script>
+</body>
+</html>

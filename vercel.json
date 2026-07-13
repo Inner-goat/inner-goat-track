@@ -20,6 +20,8 @@
     { "source": "/beratung/", "destination": "/beratung.html" },
     { "source": "/podcast", "destination": "/podcast.html" },
     { "source": "/podcast/", "destination": "/podcast.html" },
+    { "source": "/goat-skill", "destination": "/goat-skill.html" },
+    { "source": "/goat-skill/", "destination": "/goat-skill.html" },
     { "source": "/ritter", "destination": "/api/r/ritter" },
     { "source": "/ritter/", "destination": "/api/r/ritter" }
   ]

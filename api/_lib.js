@@ -80,6 +80,7 @@ const EMPF  = "https://inner-goat-track.vercel.app/empfehlung"; // Funnel "Nie w
 const BERAT = "https://inner-goat-track.vercel.app/beratung";   // Sticker "Dein bestes Argument bist du" → Gratis-Beratung
 const PODCAST = "https://inner-goat-track.vercel.app/podcast";  // Sticker "Du redest, keiner hört dir zu" → Podcast + WhatsApp-Community
 const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Ritter-Persönlichkeitstest (Storybuilder-Quiz)
+const GOATSKILL = "https://inner-goat-track.vercel.app/goat-skill"; // Funnel: 3 GOAT Skills (kostenlos, per Mail)
 
 // Spalten: [id, name, cta, destination, typ, kampagne]
 //   typ      = "sticker" | "kampagne"  (für die Trennung im Dashboard)
@@ -104,5 +105,5 @@ export const SEED = [
   // Eigene Sticker-IDs → Scans getrennt von Instagram sichtbar.
   // campaign gesetzt → Scans zählen zusätzlich zur Kampagnen-Summe.
   ["st-ritter",        "Ritter-Test (Sticker)",                     "Sticker",            RITTER, "sticker",  "ritter"],
-  ["st-skills",        "Claude Skills (Sticker)",                   "Sticker",            SKILLS, "sticker",  "skills"],
+  ["st-skills",        "GOAT Skill (Sticker)",                      "Sticker",            GOATSKILL,"sticker", "goatskill"],
 ];

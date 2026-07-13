@@ -90,6 +90,29 @@ const CAMPAIGNS = {
          Und ganz wichtig: Wir <b>verkaufen dir nichts</b>. Es geht nur um dich und dein Argument.</p>`,
     cta: { label: "🐐 Inner GOAT Academy ansehen", url: "https://inner-goat.com/inner-goat-academy/" },
     outro: `<p>Bis gleich — ich freu mich auf dich.</p>`
+  },
+  // Sticker/Funnel "GOAT Skill" → 3 Claude-Skill-Dateien (kostenlos)
+  goatskill: {
+    files: [
+      { url: `${BASE}/goat-storytelling.zip`, filename: "goat-storytelling.zip" },
+      { url: `${BASE}/goat-sales.zip`,        filename: "goat-sales.zip" },
+      { url: `${BASE}/goat-mentor.zip`,       filename: "goat-mentor.zip" }
+    ],
+    subject: "Deine 3 GOAT Skills für Claude 🐐",
+    title: "Deine 3 GOAT Skills sind da.",
+    body: (name) => `
+      <p>${hi(name)}</p>
+      <p>hier sind deine <b>3 GOAT Skills für Claude</b> — im Anhang als fertige Skill-Dateien:</p>
+      <ul style="line-height:1.7">
+        <li><b>GOAT Storytelling</b> — deine Founder-Story, die verkauft (nach „Art of Breaking Yourself")</li>
+        <li><b>GOAT Sales</b> — verkaufen mit Haltung statt Druck</li>
+        <li><b>GOAT Mentor</b> — dein Sparringspartner für Gründer-Entscheidungen</li>
+      </ul>
+      <p><b>So installierst du sie</b> (30 Sek.): ZIP entpacken → den Skill-Ordner in Claude hochladen
+         (claude.ai → <i>Settings → Capabilities → Skills</i>) oder in <code>~/.claude/skills/</code> legen.
+         Dann sag Claude einfach: „nutze GOAT Storytelling".</p>`,
+    cta: { label: "🐐 Mehr in der Inner GOAT Academy", url: "https://inner-goat.com/inner-goat-academy/" },
+    outro: `<p>Komplett kostenlos — wir wollen sehen, ob's dir hilft. Wenn ja, sag uns Bescheid (einfach auf diese Mail antworten). Trust your goat.</p>`
   }
 };
 
@@ -116,11 +139,16 @@ function emailHtml(c, name) {
 // Schickt die Lead-Magnet-Mail über Resend. Nur aktiv, wenn RESEND_API_KEY gesetzt ist.
 async function sendMail(to, c, name) {
   if (!process.env.RESEND_API_KEY) return { sent: false, reason: "no_key" };
-  let attachments;
-  try {
-    const buf = Buffer.from(await (await fetch(c.pdf)).arrayBuffer());
-    attachments = [{ filename: c.filename, content: buf.toString("base64") }];
-  } catch { /* Anhang optional – Link ist im Mailtext */ }
+  // Anhänge: entweder mehrere (c.files) oder ein einzelnes PDF (c.pdf).
+  const wanted = c.files || (c.pdf ? [{ url: c.pdf, filename: c.filename }] : []);
+  let attachments = [];
+  for (const f of wanted) {
+    try {
+      const buf = Buffer.from(await (await fetch(f.url)).arrayBuffer());
+      attachments.push({ filename: f.filename, content: buf.toString("base64") });
+    } catch { /* Anhang optional – Link ist im Mailtext */ }
+  }
+  if (!attachments.length) attachments = undefined;
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
