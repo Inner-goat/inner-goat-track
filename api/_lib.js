@@ -79,7 +79,8 @@ const SKILLS= "https://inner-goat-track.vercel.app/skills"; // Klickpfad-Funnel 
 const EMPF  = "https://inner-goat-track.vercel.app/empfehlung"; // Funnel "Nie wieder nur von Empfehlungen leben"
 const BERAT = "https://inner-goat-track.vercel.app/beratung";   // Sticker "Dein bestes Argument bist du" → Gratis-Beratung
 const PODCAST = "https://inner-goat-track.vercel.app/podcast";  // Sticker "Du redest, keiner hört dir zu" → Podcast + WhatsApp-Community
-const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Ritter-Persönlichkeitstest (Storybuilder-Quiz)
+const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Ritter-Persönlichkeitstest (Instagram/Kampagne — E-Mail am Anfang)
+const RITTER_STICKER = "https://storybuilder-cards.vercel.app/quiz?source=st-ritter"; // Sticker-Variante (value-first: kein E-Mail-Gate, Mail optional am Ende)
 const GOATSKILL = "https://inner-goat-track.vercel.app/goat-skill"; // Funnel: 3 GOAT Skills (kostenlos, per Mail)
 
 // Spalten: [id, name, cta, destination, typ, kampagne]
@@ -104,6 +105,14 @@ export const SEED = [
   // ── Physische Sticker (Serie V3, eigene QR pro Motiv) ───────────
   // Eigene Sticker-IDs → Scans getrennt von Instagram sichtbar.
   // campaign gesetzt → Scans zählen zusätzlich zur Kampagnen-Summe.
-  ["st-ritter",        "Ritter-Test (Sticker)",                     "Sticker",            RITTER, "sticker",  "ritter"],
+  ["st-ritter",        "Ritter-Test (Sticker)",                     "Sticker",            RITTER_STICKER, "sticker",  "ritter"],
   ["st-skills",        "GOAT Skill (Sticker)",                      "Sticker",            GOATSKILL,"sticker", "goatskill"],
 ];
+
+// Destination-Overrides: erzwingen das Ziel eines Links UNABHÄNGIG vom DB-Stand.
+// Nötig, wenn die SEED sich ändert, aber `/api/setup` (Passwort-geschützt) noch
+// nicht erneut gelaufen ist — so greift die neue Route sofort nach dem Deploy.
+// Nach einem setup-Lauf ist der Override redundant (DB == SEED) und kann weg.
+export const DEST_OVERRIDES = {
+  "st-ritter": RITTER_STICKER,
+};

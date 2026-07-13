@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import { parseUA, geo, isBot, visitHash } from "../_lib.js";
+import { parseUA, geo, isBot, visitHash, DEST_OVERRIDES } from "../_lib.js";
 
 function redirect(res, dest) {
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
@@ -69,6 +69,8 @@ export default async function handler(req, res) {
     const { rows } = await sql`SELECT destination, type FROM links WHERE id=${id}`;
     if (rows[0] && rows[0].destination) dest = rows[0].destination;
     if (rows[0] && rows[0].type) destType = rows[0].type;
+    // Code-Override schlägt den DB-Wert (falls setup noch nicht neu lief).
+    if (DEST_OVERRIDES && DEST_OVERRIDES[id]) dest = DEST_OVERRIDES[id];
     const d = parseUA(ua);
     const g = geo(req);
     const ins = await sql`
