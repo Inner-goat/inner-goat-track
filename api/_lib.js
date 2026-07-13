@@ -78,6 +78,7 @@ const KI    = "https://inner-goat-track.vercel.app/ki";     // Klickpfad-Funnel 
 const SKILLS= "https://inner-goat-track.vercel.app/skills"; // Klickpfad-Funnel (Instagram "25 Claude Skills")
 const EMPF  = "https://inner-goat-track.vercel.app/empfehlung"; // Funnel "Nie wieder nur von Empfehlungen leben"
 const BERAT = "https://inner-goat-track.vercel.app/beratung";   // Sticker "Dein bestes Argument bist du" → Gratis-Beratung
+const PODCAST = "https://inner-goat-track.vercel.app/podcast";  // Sticker "Du redest, keiner hört dir zu" → Podcast + WhatsApp-Community
 const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Ritter-Persönlichkeitstest (Storybuilder-Quiz)
 
 // Spalten: [id, name, cta, destination, typ, kampagne]
@@ -86,7 +87,7 @@ const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Rit
 //              Ein Sticker kann gleichzeitig eine Kampagne speisen (z.B. Ideenliste).
 export const SEED = [
   // ── Sticker (SuperReturn-Kampagne) ──────────────────────────────
-  ["cards-zuhoeren",   "Du redest. Keiner hört dir zu",             "Storytelling Cards", CARDS,  "sticker",  null],
+  ["cards-zuhoeren",   "Du redest. Keiner hört dir zu",             "Podcast",            PODCAST,"sticker",  null],
   ["yt-podcast",       "GOAT Mode ON · Podcast",                    "YouTube",            YT,     "sticker",  null],
   ["web-argument",     "Dein bestes Argument bist du",              "Beratung",           BERAT,  "sticker",  "beratung"],
   ["academy-netzwerk", "Netzwerkst du noch oder verdienst du schon","Academy",            ACAD,   "sticker",  null],
