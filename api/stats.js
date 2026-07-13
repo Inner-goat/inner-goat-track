@@ -69,17 +69,22 @@ export default async function handler(req, res) {
   const leadsFor = (id) => (leadMap[id] || 0) + (quizMap[id] || 0);
   // Kampagnen = alle Lead-Quellen ∪ alle Links mit campaign-Feld.
   // So erscheint jede Kampagne, sobald sie Leads ODER einen Tracking-Link hat.
-  const campLink = Object.fromEntries(links.filter(l => l.campaign).map(l => [l.campaign, l]));
+  // Scans pro Kampagne = Summe ALLER Links, die diese Quelle speisen (Instagram + physischer Sticker …)
+  const campScans = {}, campName = {};
+  for (const l of links.filter(x => x.campaign)) {
+    campScans[l.campaign] = (campScans[l.campaign] || 0) + l.n;
+    // Kampagnen-Name bevorzugt vom Funnel-Link (nicht vom Sticker-Zusatz)
+    if ((l.type !== "sticker" || !campName[l.campaign])) campName[l.campaign] = l.name;
+  }
   const NAMES = { ideen: "Ideenliste", ki: "Hör auf, teure App-Abos zu zahlen",
                   skills: "25 Claude Skills, die dein Team ersetzen",
                   empfehlung: "Nie wieder nur von Empfehlungen leben",
                   ritter: "Welcher Gründer-Typ bist du? (Ritter-Test)" };
-  const campIds = [...new Set([...Object.keys(campLink), ...leadsBySource.map(x => x.k)])].filter(Boolean);
+  const campIds = [...new Set([...Object.keys(campScans), ...leadsBySource.map(x => x.k)])].filter(Boolean);
   const campaigns = campIds.map(id => {
-    const l = campLink[id];
-    const scans = l ? l.n : 0;
+    const scans = campScans[id] || 0;
     const leads = leadsFor(id);
-    return { id, name: (l && l.name) || NAMES[id] || id, scans, leads,
+    return { id, name: campName[id] || NAMES[id] || id, scans, leads,
              conv: scans ? Math.round((leads / scans) * 100) : 0 };
   }).sort((a, b) => b.leads - a.leads);
   // Gesamt-E-Mails = Neon + Quiz-Leads unserer Kampagnen (nicht quiz-fremde Quellen).

@@ -100,4 +100,9 @@ export const SEED = [
   // Ritter-Test = Kampagne (taucht im Dashboard auf). Leads werden im
   // Storybuilder-Quiz selbst gesammelt, nicht hier → E-Mails-Spalte bleibt 0.
   ["ritter",           "Welcher Gründer-Typ bist du? (Ritter-Test)","Quiz",               RITTER, "kampagne", "ritter"],
+  // ── Physische Sticker (Serie V3, eigene QR pro Motiv) ───────────
+  // Eigene Sticker-IDs → Scans getrennt von Instagram sichtbar.
+  // campaign gesetzt → Scans zählen zusätzlich zur Kampagnen-Summe.
+  ["st-ritter",        "Ritter-Test (Sticker)",                     "Sticker",            RITTER, "sticker",  "ritter"],
+  ["st-skills",        "Claude Skills (Sticker)",                   "Sticker",            SKILLS, "sticker",  "skills"],
 ];
