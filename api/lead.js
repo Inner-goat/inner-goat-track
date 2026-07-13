@@ -75,6 +75,21 @@ const CAMPAIGNS = {
             Und wenn du den ganzen Weg willst (deine Story, Personal Branding, Sales), zeig ich ihn dir in der
             <a href="https://inner-goat.com/inner-goat-academy/" style="color:#FF5F00;font-weight:700">Inner GOAT Academy</a> –
             oder antworte einfach auf diese Mail.</p>`
+  },
+  // Sticker "Dein bestes Argument bist du" → kostenloses Beratungsgespräch (kein PDF)
+  beratung: {
+    subject: "Deine Gratis-Beratung bei Inner GOAT 🐐",
+    title: "Deine Gratis-Beratung ist reserviert.",
+    body: (name) => `
+      <p>${hi(name)}</p>
+      <p>stark, dass du dein bestes Argument schärfen willst. <b>Nel &amp; ich melden uns
+         innerhalb von 24 Stunden</b> bei dir, um einen Termin auszumachen.</p>
+      <p><b>Kurz zur Einordnung:</b> Wir haben zusammen <b>11+ Jahre Erfahrung</b> in Storytelling,
+         Sales &amp; Personal Branding. Normalerweise kostet so ein Gespräch richtig Geld —
+         aber weil wir junge Gründer*innen unterstützen wollen, machen wir das <b>kostenlos</b>.
+         Und ganz wichtig: Wir <b>verkaufen dir nichts</b>. Es geht nur um dich und dein Argument.</p>`,
+    cta: { label: "🐐 Inner GOAT Academy ansehen", url: "https://inner-goat.com/inner-goat-academy/" },
+    outro: `<p>Bis gleich — ich freu mich auf dich.</p>`
   }
 };
 

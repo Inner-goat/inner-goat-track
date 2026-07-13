@@ -16,6 +16,8 @@
     { "source": "/skills/", "destination": "/skills.html" },
     { "source": "/empfehlung", "destination": "/empfehlung.html" },
     { "source": "/empfehlung/", "destination": "/empfehlung.html" },
+    { "source": "/beratung", "destination": "/beratung.html" },
+    { "source": "/beratung/", "destination": "/beratung.html" },
     { "source": "/ritter", "destination": "/api/r/ritter" },
     { "source": "/ritter/", "destination": "/api/r/ritter" }
   ]

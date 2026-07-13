@@ -77,6 +77,7 @@ const IDEEN = "https://inner-goat-track.vercel.app/ideen"; // Klickpfad-Funnel (
 const KI    = "https://inner-goat-track.vercel.app/ki";     // Klickpfad-Funnel (Instagram "KI-App-Bauplan")
 const SKILLS= "https://inner-goat-track.vercel.app/skills"; // Klickpfad-Funnel (Instagram "25 Claude Skills")
 const EMPF  = "https://inner-goat-track.vercel.app/empfehlung"; // Funnel "Nie wieder nur von Empfehlungen leben"
+const BERAT = "https://inner-goat-track.vercel.app/beratung";   // Sticker "Dein bestes Argument bist du" → Gratis-Beratung
 const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Ritter-Persönlichkeitstest (Storybuilder-Quiz)
 
 // Spalten: [id, name, cta, destination, typ, kampagne]
@@ -87,7 +88,7 @@ export const SEED = [
   // ── Sticker (SuperReturn-Kampagne) ──────────────────────────────
   ["cards-zuhoeren",   "Du redest. Keiner hört dir zu",             "Storytelling Cards", CARDS,  "sticker",  null],
   ["yt-podcast",       "GOAT Mode ON · Podcast",                    "YouTube",            YT,     "sticker",  null],
-  ["web-argument",     "Dein bestes Argument bist du",              "Website",            WEB,    "sticker",  null],
+  ["web-argument",     "Dein bestes Argument bist du",              "Beratung",           BERAT,  "sticker",  "beratung"],
   ["academy-netzwerk", "Netzwerkst du noch oder verdienst du schon","Academy",            ACAD,   "sticker",  null],
   ["web-ideenliste",   "Deine Ideenliste ist unendlich",            "Website",            IDEEN,  "sticker",  "ideen"],  // Sticker UND Kampagne
   // ── Kampagnen (Instagram-Funnels, sammeln E-Mails) ──────────────
