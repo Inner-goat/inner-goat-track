@@ -95,12 +95,18 @@ export default async function handler(req, res) {
   // zurück auf .vercel.app, das TikTok blockt.
   let target = dest;
   if (funnelLink) { try { const u = new URL(dest); target = u.pathname + u.search; } catch (e) { /* dest war schon relativ */ } }
-  // GPS-Zwischenseite NUR für physische Sticker (type='sticker'). Alle digitalen
-  // Links (Kampagnen, Quiz/Ritter-Test …) leiten sofort sauber weiter — die
-  // GPS-Abfrage hängt in In-App-Browsern und bringt bei digitalem Traffic nichts.
-  if (bot || !scanId || funnelLink || destType !== "sticker") return redirect(res, target);
-  // Physische Sticker (Menschen): Zwischenseite mit GPS-Abfrage (leitet immer weiter).
+  // GPS-Zwischenseite für PHYSISCHE Sticker. Ein Sticker-Scan wird erkannt an
+  //   ?st=1 im QR (jeder gedruckte Sticker-QR trägt das)  ODER  type='sticker'.
+  // Der funnelLink-Check steuert nur noch das RELATIVE Redirect-Ziel (Domain-Treue),
+  // blockiert die GPS-Abfrage aber NICHT mehr — so bekommen auch Sticker mit
+  // Funnel-Ziel (z.B. /beratung, /podcast, /skills) den Standort-Dialog.
+  // Digitale Links (Instagram-Funnel ohne ?st=1, Kampagnen) leiten weiter sofort
+  // sauber weiter — dort hängt die GPS-Abfrage in In-App-Browsern.
+  const isSticker = destType === "sticker" || (req.query && req.query.st);
+  if (bot || !scanId || !isSticker) return redirect(res, target);
+  // Physische Sticker (Menschen): Zwischenseite mit GPS-Abfrage (leitet immer weiter,
+  // 4,5s-Fallback). Redirect-Ziel = target (host-relativ bei Funnel → bleibt auf go.inner-goat.com).
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
   res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.status(200).send(interstitial(scanId, dest));
+  res.status(200).send(interstitial(scanId, target));
 }
