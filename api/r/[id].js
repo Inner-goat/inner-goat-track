@@ -102,7 +102,10 @@ export default async function handler(req, res) {
   // Funnel-Ziel (z.B. /beratung, /podcast, /skills) den Standort-Dialog.
   // Digitale Links (Instagram-Funnel ohne ?st=1, Kampagnen) leiten weiter sofort
   // sauber weiter — dort hängt die GPS-Abfrage in In-App-Browsern.
-  const isSticker = destType === "sticker" || (req.query && req.query.st);
+  // GPS-Zwischenseite NUR beim gedruckten Sticker: der QR trägt ?st=1.
+  // Alle anderen /r/-Links (Linktree, Bio, Mail, digital) leiten sofort sauber
+  // weiter, ohne Standort-Abfrage. Scan/Klick wird trotzdem geloggt.
+  const isSticker = !!(req.query && req.query.st);
   if (bot || !scanId || !isSticker) return redirect(res, target);
   // Physische Sticker (Menschen): Zwischenseite mit GPS-Abfrage (leitet immer weiter,
   // 4,5s-Fallback). Redirect-Ziel = target (host-relativ bei Funnel → bleibt auf go.inner-goat.com).
