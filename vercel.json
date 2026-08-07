@@ -1,28 +1,143 @@
 {
   "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/blog-assets/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
   "crons": [
-    { "path": "/api/sync-to-flow", "schedule": "0 8 * * *" }
+    {
+      "path": "/api/sync-to-flow",
+      "schedule": "0 8 * * *"
+    }
   ],
   "rewrites": [
-    { "source": "/r/:id", "destination": "/api/r/:id" },
-    { "source": "/r/:id/", "destination": "/api/r/:id" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/ideen", "destination": "/ideen.html" },
-    { "source": "/ideen/", "destination": "/ideen.html" },
-    { "source": "/ki", "destination": "/ki.html" },
-    { "source": "/ki/", "destination": "/ki.html" },
-    { "source": "/skills", "destination": "/skills.html" },
-    { "source": "/skills/", "destination": "/skills.html" },
-    { "source": "/empfehlung", "destination": "/empfehlung.html" },
-    { "source": "/empfehlung/", "destination": "/empfehlung.html" },
-    { "source": "/beratung", "destination": "/beratung.html" },
-    { "source": "/beratung/", "destination": "/beratung.html" },
-    { "source": "/podcast", "destination": "/podcast.html" },
-    { "source": "/podcast/", "destination": "/podcast.html" },
-    { "source": "/goat-skill", "destination": "/goat-skill.html" },
-    { "source": "/goat-skill/", "destination": "/goat-skill.html" },
-    { "source": "/ritter", "destination": "/api/r/ritter" },
-    { "source": "/ritter/", "destination": "/api/r/ritter" }
+    {
+      "source": "/r/:id",
+      "destination": "/api/r/:id"
+    },
+    {
+      "source": "/r/:id/",
+      "destination": "/api/r/:id"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/ideen",
+      "destination": "/ideen.html"
+    },
+    {
+      "source": "/ideen/",
+      "destination": "/ideen.html"
+    },
+    {
+      "source": "/ki",
+      "destination": "/ki.html"
+    },
+    {
+      "source": "/ki/",
+      "destination": "/ki.html"
+    },
+    {
+      "source": "/skills",
+      "destination": "/skills.html"
+    },
+    {
+      "source": "/skills/",
+      "destination": "/skills.html"
+    },
+    {
+      "source": "/empfehlung",
+      "destination": "/empfehlung.html"
+    },
+    {
+      "source": "/empfehlung/",
+      "destination": "/empfehlung.html"
+    },
+    {
+      "source": "/newsletter",
+      "destination": "/newsletter.html"
+    },
+    {
+      "source": "/newsletter/",
+      "destination": "/newsletter.html"
+    },
+    {
+      "source": "/beratung",
+      "destination": "/beratung.html"
+    },
+    {
+      "source": "/beratung/",
+      "destination": "/beratung.html"
+    },
+    {
+      "source": "/podcast",
+      "destination": "/podcast.html"
+    },
+    {
+      "source": "/podcast/",
+      "destination": "/podcast.html"
+    },
+    {
+      "source": "/goat-skill",
+      "destination": "/goat-skill.html"
+    },
+    {
+      "source": "/goat-skill/",
+      "destination": "/goat-skill.html"
+    },
+    {
+      "source": "/buildandsell",
+      "destination": "/buildandsell.html"
+    },
+    {
+      "source": "/buildandsell/",
+      "destination": "/buildandsell.html"
+    },
+    {
+      "source": "/ritter",
+      "destination": "/api/r/ritter"
+    },
+    {
+      "source": "/ritter/",
+      "destination": "/api/r/ritter"
+    },
+    {
+      "source": "/bryght",
+      "destination": "/api/r/bryght"
+    },
+    {
+      "source": "/bryght/",
+      "destination": "/api/r/bryght"
+    },
+    {
+      "source": "/workspace",
+      "destination": "/api/r/workspace"
+    },
+    {
+      "source": "/workspace/",
+      "destination": "/api/r/workspace"
+    }
   ]
 }
