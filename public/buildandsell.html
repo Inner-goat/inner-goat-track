@@ -28,10 +28,9 @@ img{max-width:100%;display:block}
 .zoom.in img{transform:scale(1)}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
-  padding:14px 22px;backdrop-filter:blur(12px);background:rgba(10,10,10,.5);border-bottom:1px solid transparent;transition:.3s}
-nav.scrolled{background:rgba(10,10,10,.9);border-bottom:1px solid var(--line)}
-nav .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:1px;font-size:14px}
-nav .brand svg{width:24px}
+  padding:11px 22px;backdrop-filter:blur(12px);background:rgba(255,255,255,.94);border-bottom:1px solid #ececec;box-shadow:0 4px 26px rgba(0,0,0,.22);transition:.3s}
+nav.scrolled{background:#fff}
+nav .brand{display:flex;align-items:center;gap:13px}
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--o);color:#0A0A0A;font-weight:800;font-size:15px;
   padding:12px 20px;border-radius:999px;transition:.2s;border:0;cursor:pointer}
 .btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(255,95,0,.45)}
@@ -78,16 +77,15 @@ h2{font-size:clamp(30px,4.8vw,52px);line-height:1.08;font-weight:900;letter-spac
 .row p b{color:#fff}
 
 .split{display:grid;grid-template-columns:1fr auto 1fr;gap:22px;align-items:stretch;margin-top:26px}
-.side{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 30px}
-.side.io{border-color:rgba(255,95,0,.4)}
-.side .ico{width:52px;height:52px;border-radius:14px;background:rgba(255,95,0,.14);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.side{background:#f6f3ee;border:1px solid #e6e0d6;border-radius:22px;padding:34px 30px;color:#141414}
+.side.io{border:1.5px solid var(--o);box-shadow:0 0 46px rgba(255,95,0,.13)}
+.side .ico{width:52px;height:52px;border-radius:14px;background:rgba(255,95,0,.16);display:flex;align-items:center;justify-content:center;margin:16px 0 16px}
 .side .ico svg{width:26px;height:26px;stroke:var(--o);fill:none;stroke-width:2}
-.side h3{font-size:23px;font-weight:800;margin-bottom:6px}
-.side p{color:var(--mut);font-size:15px}
-.side .who{font-size:12px;font-weight:800;letter-spacing:2px;color:var(--o);text-transform:uppercase;margin-bottom:12px}
-.joclogo{display:inline-block;background:#fff;border-radius:10px;padding:7px 12px;margin-bottom:14px}
-.joclogo img{height:22px;width:auto}
-.iglogo{height:26px;width:auto;margin-bottom:14px}
+.side h3{font-size:23px;font-weight:800;margin-bottom:6px;color:#0e0e0e}
+.side p{color:#5b564e;font-size:15px}
+.side .who{font-size:12px;font-weight:800;letter-spacing:2px;color:var(--o);text-transform:uppercase;margin-bottom:2px}
+.joclogo img{height:30px;width:auto;display:block}
+.iglogo{height:30px;width:auto}
 .navjoc{background:#fff;border-radius:7px;padding:4px 8px;display:inline-flex;align-items:center}
 .navjoc img{height:15px;width:auto}
 .xmid{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:34px;color:var(--o)}
@@ -155,9 +153,9 @@ footer a{color:var(--o)}
 
 <nav id="nav">
   <a class="brand" href="#top">
-    <img src="/inner-goat-logo.svg" alt="Inner GOAT" style="height:26px;width:auto">
-    <span style="color:var(--mut);font-weight:700;font-size:18px">×</span>
-    <span class="navjoc"><img src="/jocapps-logo.png" alt="jocapps"></span>
+    <img src="/inner-goat-logo.svg" alt="Inner GOAT" style="height:25px;width:auto">
+    <span style="color:#b7b1a8;font-weight:700;font-size:17px">×</span>
+    <img src="/jocapps-logo.png" alt="jocapps" style="height:32px;width:auto">
   </a>
   <a class="btn" href="#call">Gespräch buchen</a>
 </nav>
@@ -188,11 +186,26 @@ footer a{color:var(--o)}
     <div class="row">
       <div>
         <div class="tag reveal">Wer dich begleitet</div>
-        <h3 class="reveal d1">Marco &amp; Nel. Deine Berater, keine Agentur.</h3>
-        <p class="reveal d2">Wir nehmen dir dein Marketing nicht ab und schicken dir dann eine Rechnung. Wir setzen uns mit dir an einen Tisch, entwickeln deine Story, deine Positionierung und dein Sales-System, und <b>begleiten dich, bis dein Produkt am Markt zündet.</b></p>
-        <p class="reveal d3">Über 11 Jahre Erfahrung in Storytelling, Personal Branding und Sales. Kein Agentur-Blabla, echte Beratung von Mensch zu Mensch.</p>
+        <h3 class="reveal d1">Marco &amp; Nel. Spezialisiert auf das, was über deinen Launch entscheidet.</h3>
+        <p class="reveal d2">Beim Launch entscheiden zwei Fragen alles: Erzählst du eine Story, die hängen bleibt? Und verkaufst du so, dass Menschen wirklich kaufen? Genau darauf sind wir spezialisiert. <b>Storytelling und Sales.</b> Nicht auf alles ein bisschen, sondern auf das, was am Ende zählt.</p>
+        <p class="reveal d3">Über 11 Jahre Erfahrung. Wir nehmen dir nichts ab und schicken dann eine Rechnung. Wir setzen uns mit dir an einen Tisch und begleiten dich, bis dein Produkt am Markt zündet. Echte Beratung von Mensch zu Mensch.</p>
       </div>
       <div class="zoom imgwrap reveal d1"><img src="https://inner-goat.com/wp-content/uploads/2025/09/inner-goat-marco-nel.jpg" alt="Marco und Nel, Inner GOAT" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- JOCAPPS / John -->
+<section style="padding-top:20px">
+  <div class="wrap">
+    <div class="row rev">
+      <div>
+        <div class="tag reveal">Dein Technik-Partner</div>
+        <h3 class="reveal d1">jocapps baut, worauf du dich verlassen kannst.</h3>
+        <p class="reveal d2">Gegründet von John Caffier, baut jocapps seit über zehn Jahren Apps, die funktionieren. <b>15.000+ Kunden, 45 Millionen End-User, ISO-zertifiziert.</b> Während wir an deiner Story und deinem Vertrieb arbeiten, entsteht dein Produkt in den besten Händen.</p>
+        <p class="reveal d3">Du musst dich nicht zwischen Technik und Vermarktung entscheiden. Beides läuft parallel, aus einer Hand.</p>
+      </div>
+      <div class="zoom imgwrap reveal d1"><img src="/john-caffier.jpg" alt="John Caffier, Gründer von jocapps" loading="lazy"></div>
     </div>
   </div>
 </section>
@@ -206,6 +219,7 @@ footer a{color:var(--o)}
     <div class="split">
       <div class="side reveal">
         <div class="joclogo"><img src="/jocapps-logo.png" alt="jocapps"></div>
+        <div class="who">Appentwicklung</div>
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M14 7l-1.5-1.5a2.1 2.1 0 00-3 0L3 11.5a2.1 2.1 0 000 3L4.5 16"/><path d="M10 17l1.5 1.5a2.1 2.1 0 003 0l6.5-6a2.1 2.1 0 000-3L19.5 8"/></svg></div>
         <h3>baut deine App</h3>
         <p>ISO-zertifizierte Entwicklung für iOS, Android, Web und KI. Ein Team, das schon 45 Millionen Menschen erreicht hat, macht aus deiner Idee ein echtes Produkt.</p>
@@ -213,7 +227,7 @@ footer a{color:var(--o)}
       <div class="xmid">×</div>
       <div class="side io reveal d2">
         <img class="iglogo" src="/inner-goat-logo.svg" alt="Inner GOAT">
-        <div class="who">Beratung</div>
+        <div class="who">Strategieberatung</div>
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8a2 2 0 00-3 0z"/><path d="M12 15l-3-3c1-4 4-9 10-9 0 6-5 9-9 10z"/><path d="M9 12H4s1-3 3-3h2M12 15v5s3-1 3-3v-2"/></svg></div>
         <h3>berät dich bis zum Launch</h3>
         <p>Wir begleiten dich durch Story, Personal Brand und Sales. Nicht als Dienstleister, der es dir abnimmt, sondern als Berater, die dich verkaufsfähig machen, bis dein Launch zündet.</p>
