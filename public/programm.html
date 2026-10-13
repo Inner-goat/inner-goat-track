@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Das Programm — Inner GOAT</title>
+<meta name="description" content="Sichtbar werden und ehrlich verkaufen, ohne dich zu verbiegen. Das 4-Monats-Programm für Solo-Experten.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--o:#FF5F00;--bg:#0E0E0E;--card:#171717;--line:#2a2a2a;--muted:#b3b3ae}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Poppins,Arial,sans-serif;background:radial-gradient(1100px 560px at 50% -10%,#2a1400,var(--bg));color:#fff;line-height:1.55}
+  .wrap{width:100%;max-width:720px;margin:0 auto;padding:0 22px}
+  header{padding:22px 0 6px}
+  header .logo{height:34px;display:block}
+  section{padding:38px 0}
+  .hero{padding:26px 0 30px}
+  .badge{display:inline-block;background:rgba(255,95,0,.15);color:var(--o);font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;margin-bottom:14px}
+  h1{font-size:34px;font-weight:900;line-height:1.1;margin-bottom:12px}
+  h1 .hl{color:var(--o)}
+  h2{font-size:24px;font-weight:800;line-height:1.2;margin-bottom:14px}
+  h3{font-size:16px;font-weight:700;margin-bottom:6px}
+  p.sub{color:var(--muted);font-size:16px;margin-bottom:18px}
+  .video{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:6px 0 14px}
+  .video video,.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .video .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:14px;text-align:center;padding:20px}
+  .video .ph .play{width:64px;height:64px;border-radius:50%;background:var(--o);display:flex;align-items:center;justify-content:center}
+  .video .ph .play:after{content:"";border-left:22px solid #fff;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px}
+  .btn{width:100%;display:block;text-align:center;text-decoration:none;background:var(--o);color:#fff;border:0;border-radius:14px;padding:17px;font-family:inherit;font-weight:800;font-size:17px;cursor:pointer;transition:.15s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,95,0,.35)}
+  .proofline{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:13.5px}
+  .proofline b{color:#fff;font-weight:800}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 20px}
+  .grid{display:grid;gap:14px}
+  .mirror li{list-style:none;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
+  .mirror li:last-child{border:0}
+  .mirror li:before{content:"→ ";color:var(--o);font-weight:800}
+  .testi{display:grid;gap:14px}
+  .testi .card{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start}
+  .testi .ava{width:56px;height:56px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--o);font-size:20px;overflow:hidden}
+  .testi .ava img{width:100%;height:100%;object-fit:cover}
+  .testi .res{font-weight:800;color:#fff;font-size:15px;margin-bottom:6px}
+  .testi .q{color:#e6e6e2;font-size:14.5px;line-height:1.6}
+  .testi .who{color:var(--muted);font-size:12.5px;margin-top:8px}
+  .steps{counter-reset:s}
+  .steps .card{position:relative;padding-left:62px}
+  .steps .card:before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:18px;width:30px;height:30px;border-radius:50%;background:var(--o);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .steps ul{margin:8px 0 0 16px;color:#e6e6e2;font-size:14.5px}
+  .steps li{margin:4px 0}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .three .card{padding:16px 12px;text-align:center}
+  .three .n{color:var(--o);font-weight:900;font-size:22px}
+  .three .t{font-weight:700;font-size:14px;margin-top:4px}
+  .price{text-align:center}
+  .price .big{font-size:44px;font-weight:900;line-height:1}
+  .price .note{color:var(--muted);font-size:14px;margin-top:8px}
+  .price .bafa{margin-top:18px;background:rgba(255,95,0,.08);border:1px solid rgba(255,95,0,.35);border-radius:14px;padding:16px;text-align:left;font-size:14.5px}
+  .price .bafa b{color:#fff}
+  .price img{width:100%;border-radius:12px;margin-top:14px;border:1px solid var(--line)}
+  .no li{list-style:none;padding:8px 0;color:#e6e6e2}
+  .no li:before{content:"✕ ";color:#888;font-weight:800}
+  .yes li:before{content:"✓ ";color:var(--o);font-weight:800}
+  .founders{display:grid;grid-template-columns:1fr;gap:14px}
+  .founders img{width:100%;border-radius:16px;border:1px solid var(--line)}
+  .faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+  .faq summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary:before{content:"+ ";color:var(--o);font-weight:900}
+  .faq details[open] summary:before{content:"– "}
+  .faq p{color:#e6e6e2;font-size:14.5px;margin-top:8px}
+  .calendly-inline-widget{min-width:320px;height:720px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin-top:14px}
+  .fine{text-align:center;color:var(--muted);font-size:13px;margin-top:14px}
+  footer{text-align:center;padding:26px 18px 34px;font-size:12.5px;line-height:1.9;color:#8a8a86}
+  footer a{color:#8a8a86}
+  .sticky{position:fixed;left:0;right:0;bottom:0;padding:10px 14px;background:rgba(14,14,14,.92);backdrop-filter:blur(8px);border-top:1px solid var(--line);transform:translateY(110%);transition:.25s;z-index:9}
+  .sticky.on{transform:none}
+  .sticky .btn{padding:14px;font-size:15px;max-width:720px;margin:0 auto}
+  @media(min-width:700px){h1{font-size:44px}h2{font-size:28px}.founders{grid-template-columns:1fr 1fr;align-items:center}}
+</style>
+<script src="/ig-tracking.js" data-seitentyp="lp" data-kampagne="programm"></script>
+</head>
+<body>
+
+<header class="wrap">
+  <img class="logo" src="/inner-goat-logo.svg" alt="Inner GOAT">
+</header>
+
+<!-- HERO -->
+<section class="wrap hero" data-ig-sicht="programm_hero">
+  <div class="badge">Das 4-Monats-Programm für Solo-Experten</div>
+  <h1>Sichtbar werden und ehrlich verkaufen, <span class="hl">ohne dich zu verbiegen.</span></h1>
+  <p class="sub">Für Selbstständige, die ihr Handwerk können und beim Verkaufen noch nicht. Schau dir das Video an, dann weißt du, ob das für dich ist.</p>
+
+  <div class="video" id="vsl">
+    <!-- SCHNITT EINSETZEN: <video id="vslv" controls playsinline poster="/vsl-poster.jpg"><source src="/vsl.mp4" type="video/mp4"></video> -->
+    <div class="ph" id="vsl-ph"><div class="play"></div><div>Das Video wird hier eingesetzt, sobald der Schnitt fertig ist.<br><small>10 Minuten · Marco erklärt, warum es bisher nicht geklappt hat und wie wir das ändern.</small></div></div>
+  </div>
+
+  <a class="btn ig--programm--klick--cta_oben" href="#termin">Gespräch buchen</a>
+  <div class="proofline"><span><b>100+</b> Gespräche mit Gründern</span><span><b>7</b> Kunden in 4 Monaten</span><span><b>BAFA</b>-förderfähig</span></div>
+</section>
+
+<!-- FÜR WEN -->
+<section class="wrap" data-ig-sicht="programm_fuerwen">
+  <h2>Klingt das nach dir?</h2>
+  <div class="card"><ul class="mirror">
+    <li>Du bist seit null bis drei Jahren solo oder frisch selbstständig, oft nach einem Konzern-Kapitel, das irgendwann nicht mehr ging.</li>
+    <li>Du kannst dein Handwerk richtig gut, aber die Anfragen kommen unregelmäßig und das Einkommen schwankt.</li>
+    <li>Du postest ab und zu, redest mit Leuten, arbeitest viel. Und trotzdem kennt kaum jemand deine Geschichte.</li>
+    <li>Du bist raus für die Freiheit, und jetzt fehlt dir die Sicherheit. Beides willst du. Das ist kein Widerspruch.</li>
+  </ul></div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="wrap" data-ig-sicht="programm_beweis" id="beweis">
+  <h2>Drei, die das mit uns gemacht haben</h2>
+  <div class="testi">
+
+    <div class="card" data-person="robin">
+      <div class="ava">R</div>
+      <div>
+        <div class="res">Von 5.000 auf 15.000 € im Monat in zwei Monaten. Von 100 auf 60 Stunden die Woche.</div>
+        <div class="q">„Vor zwei Monaten habe ich rund 5.000 Euro im Monat gemacht und dafür 100 Stunden die Woche gearbeitet. Heute sind es 15.000 Euro bei 60 Stunden. Mit Marco und Nel haben wir nicht an mehr Arbeit gearbeitet, sondern daran, was ich verkaufe, an wen, und zu welchem Preis."</div>
+        <div class="who">Robin, Softwareentwickler und Familienvater</div>
+      </div>
+    </div>
+
+    <div class="card" data-person="aniva">
+      <div class="ava">A</div>
+      <div>
+        <div class="res">„Es ist endlich real geworden und greifbar. Es ist keine Hoffnung mehr."</div>
+        <div class="q">„Es ist schon Wahnsinn, was man in anderthalb Stunden hinbekommt, wofür man alleine ein halbes Jahr braucht. Ich habe das Gefühl, 300 Schritte gemacht zu haben. Und ich bin erst eine Woche dabei."</div>
+        <div class="who">Aniva, Online-Marketing und Content, Hamburg</div>
+      </div>
+    </div>
+
+    <div class="card" data-person="julia">
+      <div class="ava">J</div>
+      <div>
+        <div class="res">Vom Unter-Wert-Verkaufen zu einem System, das nicht kippt, sobald ein Kunde kommt.</div>
+        <div class="q">„Sobald ein Auftrag da war, blieb meine eigene Akquise liegen, und meine Preise blieben unter dem, was meine Arbeit wert ist. Mit Marco und Nel habe ich an drei Dingen gearbeitet: meinem Preis, meiner Zielgruppe und einem wöchentlichen System. Das Ergebnis ist nicht nur mehr Umsatz, sondern Ruhe im Kopf."</div>
+        <div class="who">Julia, Texterin und LinkedIn-Ghostwriterin, Wien</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="btn ig--programm--klick--cta_beweis" href="#termin" style="margin-top:16px">Gespräch buchen</a>
+</section>
+
+<!-- MECHANISMUS -->
+<section class="wrap" data-ig-sicht="programm_reihenfolge">
+  <h2>Warum es bisher nicht geklappt hat</h2>
+  <p class="sub">Nicht, weil du zu wenig gemacht hast. Die Reihenfolge war falsch. Wer mit Sales anfängt, ohne Story, wirkt wie ein Verkäufer. Wer mit Sichtbarkeit anfängt, ohne Story, ist beliebig. Deshalb arbeiten wir in genau dieser Reihenfolge:</p>
+  <div class="three">
+    <div class="card"><div class="n">1</div><div class="t">Story</div></div>
+    <div class="card"><div class="n">2</div><div class="t">Sichtbarkeit</div></div>
+    <div class="card"><div class="n">3</div><div class="t">Sales</div></div>
+  </div>
+</section>
+
+<!-- WAS DRIN IST -->
+<section class="wrap" data-ig-sicht="programm_inhalt">
+  <h2>Was in den vier Monaten drin ist</h2>
+  <div class="grid steps">
+    <div class="card">
+      <h3>Strategieberatung 1:1 mit Marco und Nel</h3>
+      <ul>
+        <li>Positionierung, Story, Kanal und Vertriebsweg auseinandergenommen</li>
+        <li>Schriftlicher Strategiebericht mit deinem 90-Tage-Plan</li>
+        <li>Das ist der BAFA-förderfähige Teil</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Vier Monate Umsetzung in einer kleinen Gruppe</h3>
+      <ul>
+        <li>Zwei Gruppen-Calls pro Woche, rund zehn Leute</li>
+        <li>Einmal im Monat ein Online-Treffen mit der ganzen Gruppe</li>
+        <li>Hausaufgaben nach jedem Call, wöchentlicher Check-in</li>
+        <li>Deine Notion-Welt: Du siehst jeden Tag, was dran ist</li>
+        <li>Leitlinien und Struktur, damit du dranbleibst</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Die Werkzeuge</h3>
+      <ul>
+        <li>Zugang zur Storytelling-Karten-App: Story-DNA finden, LinkedIn-Posts bauen</li>
+        <li>Die Inner GOAT Academy mit über 150 Videos</li>
+        <li>Die Vorlagen, mit denen wir selbst arbeiten</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PREIS -->
+<section class="wrap price" data-ig-sicht="programm_preis">
+  <h2>Was es kostet</h2>
+  <div class="card">
+    <div class="big">4.500 €</div>
+    <div class="note">für vier Monate · Ratenzahlung möglich · ein Preis für alle, mit oder ohne Förderung</div>
+    <div class="bafa">
+      <b>BAFA-förderfähig.</b> 3.500 € davon sind der Beratungsteil mit deinem Strategiebericht. In Hamburg und den alten Bundesländern bekommst du <b>bis zu 1.750 €</b> zurück, in den neuen Bundesländern <b>bis zu 2.800 €</b>. Den Antrag wickeln wir für dich ab. Ob die Förderung bei dir greift, prüfen wir im Gespräch, nicht jeder Beruf ist antragsberechtigt. Die aktuelle Förderrichtlinie läuft am <b>31.12.2026</b> aus, Anträge müssen bis dahin gestellt sein.
+      <img src="/bafa-karte.png" alt="BAFA-Fördergebiete: 80 Prozent im Osten plus Lüneburg und Trier, 50 Prozent im Westen plus Berlin und Leipzig" loading="lazy">
+    </div>
+  </div>
+  <a class="btn ig--programm--klick--cta_preis" href="#termin" style="margin-top:16px">Gespräch buchen</a>
+</section>
+
+<!-- FÜR WEN NICHT -->
+<section class="wrap" data-ig-sicht="programm_nicht">
+  <h2>Für wen es nichts ist</h2>
+  <div class="card"><ul class="no">
+    <li>Du führst ein gefundetes Startup mit Team.</li>
+    <li>Du bist ausgebucht und hast keinen Schmerz.</li>
+    <li>Du suchst jemanden, der dir Kunden liefert, ohne dass du selbst sichtbar wirst.</li>
+  </ul>
+  <p style="color:var(--muted);font-size:14px;margin-top:10px">Das machen wir nicht, und das sagen wir dir auch im Gespräch so.</p></div>
+</section>
+
+<!-- MARCO UND NEL -->
+<section class="wrap" data-ig-sicht="programm_wir">
+  <h2>Wer wir sind</h2>
+  <div class="founders">
+    <!-- FOTO EINSETZEN: <img src="/marco-nel.jpg" alt="Marco und Nel"> -->
+    <div class="card">
+      <p style="color:#e6e6e2;font-size:15px">Marco und Nel, Founder von Inner GOAT. Marco kommt aus dem Storytelling und der Sichtbarkeit, Nel aus dem Vertrieb. Wir machen jede Woche selbst, was wir dir beibringen: Podcast, Posts, Gespräche. Unsere Mission ist einfach: Dass gute Leute nicht daran scheitern, dass niemand ihre Geschichte kennt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABLAUF -->
+<section class="wrap" data-ig-sicht="programm_ablauf">
+  <h2>So läuft es nach dem Klick</h2>
+  <div class="grid steps">
+    <div class="card"><h3>Du buchst dir unten einen Termin</h3><p style="color:var(--muted);font-size:14px">Dreißig Minuten, mit Nel oder mit Marco.</p></div>
+    <div class="card"><h3>Du beantwortest drei kurze Fragen</h3><p style="color:var(--muted);font-size:14px">Seit wann selbstständig, was du machst, dein größtes Thema gerade.</p></div>
+    <div class="card"><h3>Wir schauen gemeinsam, wo du stehst</h3><p style="color:var(--muted);font-size:14px">Ehrliches Feedback, auch wenn du danach nicht mit uns arbeitest.</p></div>
+    <div class="card"><h3>Wenn es passt, sagen wir es. Wenn nicht, auch.</h3><p style="color:var(--muted);font-size:14px">Kein Pitch. Versprochen.</p></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="wrap faq" data-ig-sicht="programm_faq">
+  <h2>Häufige Fragen</h2>
+  <details><summary>Wie viel Zeit brauche ich pro Woche?</summary><p>Zwei Gruppen-Calls à rund eine Stunde, dazu die Hausaufgabe. Rechne mit drei bis vier Stunden pro Woche, die du dir fest blockst.</p></details>
+  <details><summary>Ist das eine Gruppe oder arbeite ich allein mit euch?</summary><p>Beides. Die Strategieberatung ist eins zu eins. Die Umsetzung läuft in einer Gruppe von rund zehn Leuten, zweimal pro Woche.</p></details>
+  <details><summary>Wie funktioniert die BAFA-Förderung?</summary><p>Der Beratungsteil ist förderfähig. Der Antrag muss vor dem Start gestellt werden, das übernehmen wir mit dir. Nach der Beratung bekommst du den Zuschuss direkt vom BAFA ausgezahlt. Nicht jeder Beruf ist antragsberechtigt, das klären wir im Gespräch.</p></details>
+  <details><summary>Kann ich in Raten zahlen?</summary><p>Ja. Die Details besprechen wir im Gespräch.</p></details>
+  <details><summary>Was passiert im Gespräch?</summary><p>Wir schauen gemeinsam, wo du stehst und woran es hakt. Du bekommst ehrliches Feedback. Wenn das Programm passt, sagen wir es dir. Wenn nicht, sagen wir dir das auch.</p></details>
+</section>
+
+<!-- TERMIN -->
+<section class="wrap" id="termin" data-ig-sicht="programm_termin">
+  <h2>Such dir deinen Termin aus</h2>
+  <p class="sub">Dreißig Minuten mit Nel oder Marco. Kein Pitch.</p>
+  <div class="calendly-inline-widget" data-url="https://calendly.com/inner-goat?hide_gdpr_banner=1&background_color=171717&text_color=ffffff&primary_color=ff5f00"></div>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <p class="fine">Wenn es passt, sagen wir es. Wenn nicht, sagen wir das auch.</p>
+</section>
+
+<footer>
+  Inner GOAT &nbsp;·&nbsp; <a href="https://inner-goat.com" target="_blank" rel="noopener">inner-goat.com</a>
+  &nbsp;·&nbsp; <a href="https://inner-goat.com/impressum/" target="_blank" rel="noopener">Impressum</a>
+  &nbsp;·&nbsp; <a href="https://inner-goat.com/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutz</a>
+</footer>
+
+<div class="sticky" id="sticky"><a class="btn ig--programm--klick--cta_sticky" href="#termin">Gespräch buchen</a></div>
+
+<script>
+  /* Testimonials nur zeigen, wenn die Person freigegeben hat. Vor dem Live-Gang auf true setzen. */
+  var FREIGEGEBEN = { robin: true, aniva: true, julia: true }; /* Freigabe Marco 13.10.2026 */
+  document.querySelectorAll('[data-person]').forEach(function (el) {
+    if (!FREIGEGEBEN[el.getAttribute('data-person')]) el.style.display = 'none';
+  });
+  if (!FREIGEGEBEN.robin && !FREIGEGEBEN.aniva && !FREIGEGEBEN.julia) {
+    var b = document.getElementById('beweis'); if (b) b.style.display = 'none';
+  }
+
+  /* Sticky-Button ab dem Moment, in dem der Hero-Button aus dem Bild ist, bis zum Termin-Block */
+  var hero = document.querySelector('.hero .btn'), termin = document.getElementById('termin'), st = document.getElementById('sticky');
+  function sticky() {
+    var h = hero.getBoundingClientRect().bottom < 0;
+    var t = termin.getBoundingClientRect().top < window.innerHeight;
+    st.classList.toggle('on', h && !t);
+  }
+  window.addEventListener('scroll', sticky, { passive: true }); sticky();
+
+  /* Video-Fortschritt ins Tracking (greift, sobald ein <video id="vslv"> drin ist) */
+  var v = document.getElementById('vslv');
+  if (v && window.igTrack) {
+    var marks = { 25: 0, 50: 0, 75: 0 }, started = 0;
+    v.addEventListener('play', function () { if (!started) { started = 1; igTrack('video', 'start', 'programm'); } });
+    v.addEventListener('timeupdate', function () {
+      var p = v.currentTime / v.duration * 100;
+      for (var m in marks) if (p >= m && !marks[m]) { marks[m] = 1; igTrack('video', 'fortschritt', 'programm|' + m, +m); }
+    });
+    v.addEventListener('ended', function () { igTrack('video', 'ende', 'programm', 100); });
+  }
+
+  /* Calendly-Buchung ins Tracking */
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.event === 'calendly.event_scheduled' && window.igTrack) igTrack('funnel', 'termin_gebucht', 'programm');
+  });
+</script>
+</body>
+</html>

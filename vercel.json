@@ -18,6 +18,24 @@
           "value": "*"
         }
       ]
+    },
+    {
+      "source": "/newsletter",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
+    },
+    {
+      "source": "/newsletter.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
     }
   ],
   "crons": [
@@ -27,6 +45,22 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/programm",
+      "destination": "/programm.html"
+    },
+    {
+      "source": "/programm/",
+      "destination": "/programm.html"
+    },
+    {
+      "source": "/newsletter",
+      "destination": "/newsletter.html"
+    },
+    {
+      "source": "/newsletter/",
+      "destination": "/newsletter.html"
+    },
     {
       "source": "/r/:id",
       "destination": "/api/r/:id"
@@ -114,6 +148,14 @@
     {
       "source": "/buildandsell/",
       "destination": "/buildandsell.html"
+    },
+    {
+      "source": "/beamten-check",
+      "destination": "/beamten-check.html"
+    },
+    {
+      "source": "/beamten-check/",
+      "destination": "/beamten-check.html"
     },
     {
       "source": "/ritter",

@@ -14,12 +14,16 @@ export default async function handler(req, res) {
   const key = process.env.INGEST_API_KEY;
   if (!url || !key) return res.status(503).json({ error: "not_configured" });
 
+  // WICHTIG: Newsletter-Leads sind hier ausgenommen. Sie laufen über die Double-Opt-In-Strecke
+  // (storybuilder-cards /api/newsletter/subscribe → /api/newsletter/confirm). Eingeschrieben
+  // wird erst nach bestätigter Einwilligung. Ohne diesen Filter würde der Cron unbestätigte
+  // Adressen ins Briefing kippen und die Einwilligung unterlaufen.
   const days = parseInt(req.query?.days, 10);
   let rows;
   try {
     rows = Number.isFinite(days)
-      ? (await sql`SELECT email, name, source FROM leads WHERE ts > now() - (${days} || ' days')::interval ORDER BY ts ASC`).rows
-      : (await sql`SELECT email, name, source FROM leads ORDER BY ts ASC`).rows;
+      ? (await sql`SELECT email, name, source FROM leads WHERE source <> 'newsletter' AND ts > now() - (${days} || ' days')::interval ORDER BY ts ASC`).rows
+      : (await sql`SELECT email, name, source FROM leads WHERE source <> 'newsletter' ORDER BY ts ASC`).rows;
   } catch (e) {
     return res.status(500).json({ error: "db" });
   }

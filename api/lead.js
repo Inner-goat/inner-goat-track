@@ -1,7 +1,15 @@
 import { sql } from "@vercel/postgres";
+import { evaluate } from "./_beamtencheck.js";
 
 const BASE = "https://inner-goat-track.vercel.app";
 const FROM = "Inner GOAT <info@inner-goat.com>";
+// Standard-Antwortadresse. Beim Umzug des Beamten-Checks auf Lucas nur die
+// replyTo/from-Zeile in der Kampagne "beamtencheck" tauschen.
+const REPLY_TO = "info@inner-goat.com";
+
+// Kampagnenfelder dürfen Funktionen sein: f(name, ctx). ctx ist bei
+// beamtencheck das Auswertungsobjekt aus evaluate().
+const val = (v, name, ctx) => (typeof v === "function" ? v(name, ctx) : v);
 
 // HTML-Escaping, damit ein Name nie Markup in die Mail einschleusen kann.
 function esc(s = "") {
@@ -113,31 +121,101 @@ const CAMPAIGNS = {
          Dann sag Claude einfach: „nutze GOAT Storytelling".</p>`,
     cta: { label: "🐐 Mehr in der Inner GOAT Academy", url: "https://inner-goat.com/inner-goat-academy/" },
     outro: `<p>Komplett kostenlos — wir wollen sehen, ob's dir hilft. Wenn ja, sag uns Bescheid (einfach auf diese Mail antworten). Trust your goat.</p>`
+  },
+  // Newsletter-Landingpage (go.inner-goat.com/newsletter) — Willkommensmail, KEIN PDF
+  newsletter: {
+    subject: "Willkommen beim Inner GOAT Briefing 🐐",
+    title: "Willkommen beim Inner GOAT Briefing.",
+    body: (name) => `
+      <p>${hi(name)}</p>
+      <p>schön, dass du dabei bist. Ab jetzt bekommst du das <b>Inner GOAT Briefing</b>, alle ein bis zwei Wochen einen echten Gedanken zu
+         Storytelling, Sales, Mindset &amp; Personal Branding. Jede Ausgabe mit einer Sache, die du
+         sofort anwenden kannst, plus dem passenden Blogartikel und einer Podcastfolge.</p>
+      <p>Im ersten Monat hörst du wöchentlich von uns, danach alle zwei Wochen. Die erste richtige
+         Ausgabe ist schon unterwegs.</p>`,
+    cta: { label: "🐐 Mehr über Inner GOAT", url: "https://inner-goat.com/" },
+    outro: `<p>Wenn dir etwas fehlt oder du eine Frage hast, antworte einfach auf diese Mail.<br>Trust your goat. Marco &amp; Nel</p>`
+  },
+
+  // ── Beamten-Check (go.inner-goat.com/beamten-check) ───────────────
+  // Personalisierte Auswertung statt PDF. Eigenes Branding und eigene
+  // Antwortadresse, weil die Zielgruppe (Referendare / junge Beamte) mit
+  // "Inner GOAT / from founders to founders" nichts anfangen kann.
+  // skipFlows: Diese Leads gehören NICHT in den Founder-Newsletter.
+  beamtencheck: {
+    skipFlows: true,
+    from: "Beamten-Check <info@inner-goat.com>",
+    replyTo: REPLY_TO,
+    brand: "BEAMTEN-CHECK",
+    signature: "Viele Grüße,<br><b>Marco Maiworm</b>",
+    footer: "Beamten-Check · ein Projekt der Mailenstein GbR · Orientierung, keine Beratung",
+    subject: (name, r) => r
+      ? `Deine Auswertung: ${r.gruen} von 5 Bereichen sind bei dir sauber`
+      : "Deine Auswertung ist da",
+    title: (name, r) => (r ? r.headline : "Deine Auswertung"),
+    cta: { label: "✉️ Antworten und 15 Minuten ausmachen", url: "mailto:info@inner-goat.com?subject=Mein%20Beamten-Check" },
+    body: (name, r) => {
+      if (!r) return `<p>${hi(name)}</p><p>deine Auswertung konnte nicht berechnet werden. Antworte kurz auf diese Mail, dann schicke ich sie dir von Hand.</p>`;
+      const AMPEL = { gruen: "🟢", gelb: "🟡", rot: "🔴" };
+      const RAND  = { gruen: "#1FA463", gelb: "#E8A400", rot: "#E5484D" };
+      const bloecke = r.bloecke.map(b => `
+        <div style="border-left:4px solid ${RAND[b.level]};background:#fff;border-radius:0 10px 10px 0;padding:15px 17px;margin:0 0 12px">
+          <div style="font-weight:800;font-size:15px">${AMPEL[b.level]} ${b.titel}</div>
+          <div style="font-size:14px;color:#555;margin-top:3px">${b.kurz}</div>
+          <div style="font-size:14px;line-height:1.65;margin-top:11px">${b.lang}</div>
+        </div>`).join("");
+      const nicht = r.nichtNoetig.map(t => `<li style="margin-bottom:7px">${t}</li>`).join("");
+      return `
+      <p>${hi(name)}</p>
+      <p>hier ist deine Auswertung. Du bist ${r.statusLabel}${r.bundesland ? " in " + r.bundesland : ""},
+         und in <b>${r.gruen} von 5 Bereichen</b> sieht es bei dir sauber aus.</p>
+      ${bloecke}
+      <div style="background:#0E0E0E;color:#fff;border-radius:12px;padding:19px;margin:24px 0">
+        <div style="color:#FF5F00;font-weight:800;font-size:12px;letter-spacing:.6px">DAS EINE FÜR DIE NÄCHSTEN 14 TAGE</div>
+        <div style="font-weight:800;font-size:17px;margin-top:7px">${r.naechsterSchritt.titel}</div>
+        <div style="font-size:14px;line-height:1.65;margin-top:9px;opacity:.9">${r.naechsterSchritt.text}</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e6e6e6;border-radius:12px;padding:17px;margin:0 0 6px">
+        <div style="font-weight:800;font-size:15px;margin-bottom:9px">Und was du gerade nicht brauchst</div>
+        <ul style="font-size:14px;line-height:1.6;margin:0;padding-left:19px;color:#333">${nicht}</ul>
+      </div>
+      <p style="font-size:15px;line-height:1.65;margin-top:22px">Wenn du magst, schaue ich mit dir 15 Minuten drüber.
+         Kostenlos, ich verkaufe dir nichts, und wenn bei dir alles passt, sage ich dir das genauso.
+         <b>Antworte einfach auf diese Mail</b>, ein Wort reicht.</p>`;
+    },
+    outro: (name, r) => `
+      <p style="font-size:13px;line-height:1.6;color:#666;background:#f0f0f0;border-radius:10px;padding:14px">
+        <b>Zur Einordnung:</b> Das ist ein Orientierungs-Check auf Basis deiner sechs Antworten, keine
+        Versicherungs- oder Anlageberatung und keine Empfehlung für ein bestimmtes Produkt. Rechtsgrundlagen:
+        § 14 und § 12 BeamtVG (Ruhegehaltssatz und Anrechnung von Ausbildungszeiten), die Beihilfeverordnungen
+        des Bundes und der Länder. Für deinen Einzelfall gilt immer, was dein Dienstherr und deine Verträge sagen.
+      </p>`
   }
 };
 
-function emailHtml(c, name) {
+function emailHtml(c, name, ctx) {
+  const cta = val(c.cta, name, ctx);
   return `
-  <div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:0 auto;color:#0E0E0E">
+  <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0E0E0E">
     <div style="background:#FF5F00;padding:22px 24px;border-radius:14px 14px 0 0">
-      <div style="font-weight:800;font-size:14px">INNER GOAT 🐐</div>
-      <div style="font-weight:800;font-size:22px;margin-top:4px">${c.title}</div>
+      <div style="font-weight:800;font-size:14px">${c.brand || "INNER GOAT 🐐"}</div>
+      <div style="font-weight:800;font-size:22px;margin-top:4px">${val(c.title, name, ctx)}</div>
     </div>
     <div style="padding:24px;background:#fafafa;border-radius:0 0 14px 14px">
-      ${c.body(name)}
-      <p style="text-align:center;margin:26px 0">
-        <a href="${c.cta.url}" style="background:#FF5F00;color:#fff;text-decoration:none;font-weight:800;padding:14px 26px;border-radius:12px;display:inline-block">
-          ${c.cta.label}</a>
-      </p>
-      ${c.outro}
-      <p style="margin-top:24px">Trust your goat,<br><b>Marco · Inner GOAT</b></p>
-      <p style="font-size:12px;color:#888;margin-top:20px">inner-goat.com · from founders to founders</p>
+      ${c.body(name, ctx)}
+      ${cta ? `<p style="text-align:center;margin:26px 0">
+        <a href="${cta.url}" style="background:#FF5F00;color:#fff;text-decoration:none;font-weight:800;padding:14px 26px;border-radius:12px;display:inline-block">
+          ${cta.label}</a>
+      </p>` : ""}
+      ${val(c.outro, name, ctx)}
+      <p style="margin-top:24px">${c.signature || "Trust your goat,<br><b>Marco · Inner GOAT</b>"}</p>
+      <p style="font-size:12px;color:#888;margin-top:20px">${c.footer || "inner-goat.com · from founders to founders"}</p>
     </div>
   </div>`;
 }
 
 // Schickt die Lead-Magnet-Mail über Resend. Nur aktiv, wenn RESEND_API_KEY gesetzt ist.
-async function sendMail(to, c, name) {
+async function sendMail(to, c, name, ctx) {
   if (!process.env.RESEND_API_KEY) return { sent: false, reason: "no_key" };
   // Anhänge: entweder mehrere (c.files) oder ein einzelnes PDF (c.pdf).
   const wanted = c.files || (c.pdf ? [{ url: c.pdf, filename: c.filename }] : []);
@@ -153,8 +231,8 @@ async function sendMail(to, c, name) {
     method: "POST",
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: FROM, to: [to], reply_to: "info@inner-goat.com",
-      subject: c.subject, html: emailHtml(c, name), attachments
+      from: c.from || FROM, to: [to], reply_to: c.replyTo || REPLY_TO,
+      subject: val(c.subject, name, ctx), html: emailHtml(c, name, ctx), attachments
     })
   });
   return { sent: r.ok, status: r.status };
@@ -163,17 +241,33 @@ async function sendMail(to, c, name) {
 // POST /api/lead  {email, name, source, answer}
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
-  const { email, name, source, answer } = req.body || {};
+  // noMail=true: Der Lead kommt aus einer Strecke, die ihre eigene Double-Opt-In-Mail
+  // verschickt (Newsletter). Dann NUR speichern, keine Mail und kein Flows-Enrollment,
+  // denn eingeschrieben wird erst nach bestätigter Einwilligung.
+  const { email, name, lastName, source, answer, noMail } = req.body || {};
   if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return res.status(400).json({ error: "invalid_email" });
   }
   const mail = email.toLowerCase().slice(0, 200);
-  const nm = (name || "").trim().slice(0, 80);
+  const nm = (name || "").trim().slice(0, 80);                 // Vorname → Begrüßung + Flows-firstName
+  const lastNm = (lastName || "").trim().slice(0, 80);
+  const fullName = (nm + (lastNm ? " " + lastNm : "")).trim(); // Vor- + Nachname → im Lead gespeichert
   const src = (source || "ideen").slice(0, 40);
   const campaign = CAMPAIGNS[src] || CAMPAIGNS.ideen;
+
+  // Antworten kommen als JSON-String (Beamten-Check) oder als Freitext (alle anderen).
+  const answerStr = (typeof answer === "string" ? answer : JSON.stringify(answer || "")).slice(0, 4000);
+
+  // Auswertung für den Beamten-Check: einmal berechnen, für Mail UND Ergebnisseite.
+  let ctx = null;
+  if (src === "beamtencheck") {
+    let ans = {};
+    try { ans = typeof answer === "string" ? JSON.parse(answer) : (answer || {}); } catch { ans = {}; }
+    ctx = evaluate(ans);
+  }
   try {
     await sql`INSERT INTO leads (email, name, source, answer, ts)
-              VALUES (${mail}, ${nm}, ${src}, ${answer || ""}, now())
+              VALUES (${mail}, ${fullName}, ${src}, ${answerStr}, now())
               ON CONFLICT (email) DO UPDATE SET
                 name = COALESCE(NULLIF(EXCLUDED.name,''), leads.name),
                 source = EXCLUDED.source, answer = EXCLUDED.answer`;
@@ -184,7 +278,7 @@ export default async function handler(req, res) {
   // Lead an GOAT Flow weiterreichen (Kontakt + Liste + Sequenz-Enrollment).
   // Fire-and-forget: darf das Lead-Speichern + die PDF-Mail NIE blockieren.
   try {
-    if (process.env.GOATFLOW_INGEST_URL && process.env.INGEST_API_KEY) {
+    if (!noMail && !campaign.skipFlows && process.env.GOATFLOW_INGEST_URL && process.env.INGEST_API_KEY) {
       fetch(process.env.GOATFLOW_INGEST_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.INGEST_API_KEY}` },
@@ -194,6 +288,8 @@ export default async function handler(req, res) {
   } catch { /* ignore */ }
 
   let mailResult = { sent: false };
-  try { mailResult = await sendMail(mail, campaign, nm); } catch (e) { /* Lead ist gespeichert, Mail nicht blockierend */ }
-  res.json({ ok: true, mailed: mailResult.sent });
+  if (!noMail) {
+    try { mailResult = await sendMail(mail, campaign, nm, ctx); } catch (e) { /* Lead ist gespeichert, Mail nicht blockierend */ }
+  }
+  res.json({ ok: true, mailed: mailResult.sent, result: ctx });
 }

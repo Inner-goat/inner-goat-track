@@ -82,6 +82,8 @@ const PODCAST = "https://inner-goat-track.vercel.app/podcast";  // Sticker "Du r
 const RITTER= "https://storybuilder-cards.vercel.app/quiz?source=ritter"; // Ritter-Persönlichkeitstest (Instagram/Kampagne — E-Mail am Anfang)
 const RITTER_STICKER = "https://storybuilder-cards.vercel.app/quiz?source=st-ritter"; // Sticker-Variante (value-first: kein E-Mail-Gate, Mail optional am Ende)
 const GOATSKILL = "https://inner-goat-track.vercel.app/goat-skill"; // Funnel: 3 GOAT Skills (kostenlos, per Mail)
+const BRYGHT = "https://bryght.social/communities/inner-goat"; // Community-Bewerbung/Info auf Bryght (Website-CTAs → getrackt)
+const WORKSPACE = "https://bryght.social/shop/4223"; // Founder Workspace (Notion-Template) auf Bryght → Website-CTA (getrackt)
 
 // Spalten: [id, name, cta, destination, typ, kampagne]
 //   typ      = "sticker" | "kampagne"  (für die Trennung im Dashboard)
@@ -102,6 +104,8 @@ export const SEED = [
   // Ritter-Test = Kampagne (taucht im Dashboard auf). Leads werden im
   // Storybuilder-Quiz selbst gesammelt, nicht hier → E-Mails-Spalte bleibt 0.
   ["ritter",           "Welcher Gründer-Typ bist du? (Ritter-Test)","Quiz",               RITTER, "kampagne", "ritter"],
+  ["bryght",           "Community-Bewerbung (Bryght)",               "Community",          BRYGHT, "kampagne", "bryght"],
+  ["workspace",        "Founder Workspace (Notion-Template)",        "Template",           WORKSPACE,"kampagne", "workspace"],
   // ── Physische Sticker (Serie V3, eigene QR pro Motiv) ───────────
   // Eigene Sticker-IDs → Scans getrennt von Instagram sichtbar.
   // campaign gesetzt → Scans zählen zusätzlich zur Kampagnen-Summe.
@@ -115,4 +119,5 @@ export const SEED = [
 // Nach einem setup-Lauf ist der Override redundant (DB == SEED) und kann weg.
 export const DEST_OVERRIDES = {
   "st-ritter": RITTER_STICKER,
+  "workspace": WORKSPACE,
 };

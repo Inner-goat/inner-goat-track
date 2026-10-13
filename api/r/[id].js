@@ -7,6 +7,59 @@ function redirect(res, dest) {
   else { res.writeHead(302, { Location: dest }); res.end(); }
 }
 
+// ── Messpunkt 20 der Tracking-Spezifikation (Kiez & Kante) ────────────────
+// Beim Sticker-Scan haengen wir Matomo-Kampagnenparameter an die Ziel-URL.
+// Damit sieht man in Matomo nicht nur, DASS gescannt wurde (das zaehlt diese
+// App schon), sondern was der Mensch nach dem Scan auf der Seite noch tut.
+//
+// Motiv-Kuerzel fuer pk_content. Die vier von Kiez & Kante benannten Motive
+// sind fest zugeordnet. Alle uebrigen Sticker bekommen ihre Link-ID mit
+// Unterstrichen statt Bindestrichen — nachvollziehbar und ohne Raterei.
+// ACHTUNG: Die Spezifikation kennt fuenf Motive, es gibt aber sieben
+// Sticker-Links. Die drei unbenannten mit Maze abstimmen und hier eintragen.
+const MOTIV = {
+  "web-argument":   "argument",       // "Dein bestes Argument bist du"
+  "cards-zuhoeren": "redest",         // "Du redest. Keiner hoert dir zu"
+  "st-skills":      "claude_skills",  // "GOAT Skill (Sticker)"
+  "st-ritter":      "gruender_test",  // "Ritter-Test (Sticker)"
+  // offen, Kuerzel bisher aus der Link-ID abgeleitet:
+  //   yt-podcast        -> yt_podcast        ("GOAT Mode ON · Podcast")
+  //   academy-netzwerk  -> academy_netzwerk  ("Netzwerkst du noch ...")
+  //   web-ideenliste    -> web_ideenliste    ("Deine Ideenliste ist unendlich")
+};
+
+const STICKER_KAMPAGNE = "goat_mode_berlin";
+
+// Nur Ziele, auf denen unser Matomo laeuft. Bei YouTube oder Bryght waeren die
+// Parameter reines Rauschen in der URL, weil sie dort niemand auswertet.
+const MESSBARE_HOSTS = /(^|\.)inner-goat\.com$|^storybuilder-cards\.vercel\.app$|^inner-goat-track\.vercel\.app$/i;
+
+function mitKampagnenparametern(ziel, linkId) {
+  if (typeof ziel !== "string" || !ziel) return ziel;
+
+  const motiv = MOTIV[linkId] || String(linkId || "").replace(/-/g, "_");
+  // Ziel kann host-relativ sein (Funnel-Links) ODER absolut. Alles andere —
+  // etwa ein fremdes Schema wie mailto: oder ein kaputter Wert — bleibt
+  // unangetastet, sonst zerlegt das Anhaengen die Weiterleitung.
+  const relativ = ziel.startsWith("/");
+  if (!relativ && !/^https?:\/\//i.test(ziel)) return ziel;
+
+  let u;
+  try {
+    u = new URL(ziel, "https://go.inner-goat.com");
+  } catch (e) {
+    return ziel; // im Zweifel nichts anfassen, der Redirect ist wichtiger
+  }
+  if (!MESSBARE_HOSTS.test(u.hostname)) return ziel;
+  // Bereits vorhandene Kampagnenparameter nie ueberschreiben.
+  if (u.searchParams.has("pk_campaign") || u.searchParams.has("mtm_campaign")) return ziel;
+
+  u.searchParams.set("pk_source", "sticker");
+  u.searchParams.set("pk_campaign", STICKER_KAMPAGNE);
+  u.searchParams.set("pk_content", motiv);
+  return relativ ? u.pathname + u.search + u.hash : u.toString();
+}
+
 // Zwischenseite: fragt GPS, schickt es ans /api/geo, leitet dann weiter.
 // Leitet IMMER weiter — bei Ablehnung, Timeout oder Klick auf "Weiter ohne Standort".
 function interstitial(scanId, dest) {
@@ -95,6 +148,9 @@ export default async function handler(req, res) {
   // zurück auf .vercel.app, das TikTok blockt.
   let target = dest;
   if (funnelLink) { try { const u = new URL(dest); target = u.pathname + u.search; } catch (e) { /* dest war schon relativ */ } }
+  // Messpunkt 20: nur echte Sticker, und keine Bots — sonst verwaessern
+  // Vorschau-Crawler von WhatsApp & Co. die Kampagnenzahlen in Matomo.
+  if (destType === "sticker" && !bot) { target = mitKampagnenparametern(target, id); }
   // GPS-Zwischenseite für PHYSISCHE Sticker. Ein Sticker-Scan wird erkannt an
   //   ?st=1 im QR (jeder gedruckte Sticker-QR trägt das)  ODER  type='sticker'.
   // Der funnelLink-Check steuert nur noch das RELATIVE Redirect-Ziel (Domain-Treue),
@@ -105,11 +161,8 @@ export default async function handler(req, res) {
   // GPS-Zwischenseite NUR beim gedruckten Sticker: der QR trägt ?st=1.
   // Alle anderen /r/-Links (Linktree, Bio, Mail, digital) leiten sofort sauber
   // weiter, ohne Standort-Abfrage. Scan/Klick wird trotzdem geloggt.
-  const isSticker = !!(req.query && req.query.st);
-  if (bot || !scanId || !isSticker) return redirect(res, target);
-  // Physische Sticker (Menschen): Zwischenseite mit GPS-Abfrage (leitet immer weiter,
-  // 4,5s-Fallback). Redirect-Ziel = target (host-relativ bei Funnel → bleibt auf go.inner-goat.com).
-  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.status(200).send(interstitial(scanId, target));
+  // Standort-/GPS-Abfrage KOMPLETT entfernt (Marco 21.08.2026): ALLE Links —
+  // Kampagnen, Funnels UND physische Sticker — leiten sofort sauber weiter, ganz
+  // ohne Standort-Zwischenseite. Scan/Klick wird weiterhin geloggt (ohne GPS).
+  return redirect(res, target);
 }

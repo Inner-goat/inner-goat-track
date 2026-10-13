@@ -10,7 +10,7 @@
   :root{--o:#FF5F00;--bg:#0E0E0E;--card:#171717;--line:#2a2a2a}
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{font-family:Poppins,Arial,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#2a1400, var(--bg));color:#fff;display:flex;align-items:center;justify-content:center;padding:22px;min-height:100%}
+  body{font-family:Poppins,Arial,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#2a1400, var(--bg));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;min-height:100%}
   .wrap{width:100%;max-width:460px}
   .goat{width:54px;height:auto;display:block;margin:0 auto 18px}
   .dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px}
@@ -36,6 +36,7 @@
   .ghost:hover{box-shadow:none;border-color:#555}
   .err{color:#ff7a7a;font-size:13px;text-align:center;margin:-4px 0 12px;min-height:16px}
 </style>
+<script src="/ig-tracking.js" data-seitentyp="lp" data-kampagne="ki"></script>
 </head>
 <body>
 <div class="wrap">
@@ -101,6 +102,7 @@ async function submit(){
   try{
     const r = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, name, source:'ki', answer})});
     if(!r.ok) throw new Error();
+    window.igTrack('funnel', 'lp_absenden', 'ki');
     show(4);
   }catch(e){
     err.textContent = "Hat nicht geklappt — bitte nochmal."; btn.disabled = false; btn.textContent = "Schick mir den Bauplan →";
@@ -109,5 +111,12 @@ async function submit(){
 document.getElementById('email').addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
 document.getElementById('name').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('email').focus(); });
 </script>
+
+<!-- Pflichtangaben: Impressum + Datenschutz (ergänzt 11.08.2026) -->
+<div style="width:100%;box-sizing:border-box;text-align:center;padding:26px 18px 30px;font-size:12.5px;line-height:1.9;color:#8a8a86;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif">
+  Inner GOAT &nbsp;·&nbsp; <a href="https://inner-goat.com" target="_blank" rel="noopener" style="color:#8a8a86">inner-goat.com</a>
+  &nbsp;·&nbsp; <a href="https://inner-goat.com/impressum/" target="_blank" rel="noopener" style="color:#8a8a86">Impressum</a>
+  &nbsp;·&nbsp; <a href="https://inner-goat.com/datenschutzerklaerung/" target="_blank" rel="noopener" style="color:#8a8a86">Datenschutz</a>
+</div>
 </body>
 </html>
