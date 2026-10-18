@@ -56,6 +56,17 @@
   .proof div:nth-child(2){transform:rotate(.5deg)}
   .proof b{display:block;color:var(--orange);font-style:italic;font-size:64px;margin-bottom:8px;line-height:.9}
   /* Mirror */
+  .spiel{padding:70px 0}
+  .spiel-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .spiel-grid h2{font-size:clamp(44px,7vw,84px)}
+  .spiel-shot{display:block;justify-self:center;width:min(100%,340px);transform:rotate(1.6deg);box-shadow:0 18px 50px rgba(0,0,0,.28);border:3px solid var(--ink);transition:transform .25s}
+  .spiel-shot:hover{transform:rotate(0) scale(1.02)}
+  .spiel-shot img{display:block;width:100%;height:auto}
+  .fakten{padding:54px 0;border-top:3px solid var(--line);border-bottom:3px solid var(--line)}
+  .fakten-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .fakten-grid div{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:22px;line-height:1;letter-spacing:.03em;padding:0 0 0 18px;border-left:3px solid var(--orange)}
+  .fakten-grid b{display:block;font-style:italic;color:var(--orange);font-size:clamp(64px,8vw,110px);line-height:.85;margin-bottom:10px}
+  @media(max-width:760px){.spiel-grid{grid-template-columns:1fr}.spiel-shot{width:min(100%,280px)}.fakten-grid{grid-template-columns:repeat(2,1fr);gap:28px 18px}}
   .mirror{border-top:2px solid var(--line)}
   .mirror div{padding:22px 0;border-bottom:2px solid var(--line);font-size:19px;display:grid;grid-template-columns:48px 1fr;gap:14px}
   .mirror div span{font-family:var(--display);font-weight:800;color:var(--orange);font-size:34px;line-height:.8}
@@ -131,7 +142,30 @@
   </div>
 </section>
 
-<div class="marquee"><span>4 Monate <i>·</i> 3 Labs <i>·</i> 2 Live-Calls pro Woche <i>·</i> 1:1 Strategieberatung <i>·</i> Wir nehmen nicht jeden <i>·</i> 4 Monate <i>·</i> 3 Labs <i>·</i> 2 Live-Calls pro Woche <i>·</i> 1:1 Strategieberatung <i>·</i> Wir nehmen nicht jeden <i>·</i></span></div>
+<!-- SPIEL -->
+<section class="on-paper spiel" data-ig-sicht="programm_spiel">
+  <div class="wrap spiel-grid">
+    <div>
+      <div class="kicker">Kleines Spiel, echter Rabatt</div>
+      <h2>10 % Rabatt<br>bei 25 Punkten.</h2>
+      <p>Flappy Bird, nur mit unserer Ziege. Tippen, flattern, durch die Bergketten. Ab 25 Punkten kommt der Code per Mail.</p>
+      <div style="margin-top:22px"><a class="btn ig--programm--klick--spiel" href="/spiel">Spielen</a></div>
+    </div>
+    <a class="spiel-shot ig--programm--klick--spiel_bild" href="/spiel" aria-label="Flappy Ziege spielen"><img src="/programm/spiel-screenshot.png" alt="Flappy Ziege: die Ziege fliegt zwischen schwarzen Bergen hindurch" width="450" height="700" loading="lazy"></a>
+  </div>
+</section>
+
+<!-- FAKTEN -->
+<section class="fakten" data-ig-sicht="programm_fakten">
+  <div class="wrap">
+    <div class="fakten-grid">
+      <div><b>4</b>Monate</div>
+      <div><b>3</b>Labs</div>
+      <div><b>2</b>Live-Calls<br>pro Woche</div>
+      <div><b>1:1</b>Strategie-<br>beratung</div>
+    </div>
+  </div>
+</section>
 
 <!-- SPIEGEL -->
 <section data-ig-sicht="programm_fuerwen">
@@ -240,20 +274,8 @@
   </div>
 </section>
 
-<!-- SPIEL -->
-<section class="on-paper" data-ig-sicht="programm_spiel" style="padding:50px 0">
-  <div class="wrap" style="display:grid;gap:18px;align-items:center;grid-template-columns:1fr">
-    <div>
-      <div class="kicker">Kleines Spiel, echter Rabatt</div>
-      <h2 style="font-size:clamp(40px,7vw,80px)">10 % Rabatt<br>bei 25 Punkten.</h2>
-      <p>Flappy Bird, nur mit unserer Ziege. 25 Punkte, und du bekommst 10 % auf das Programm per Mail. Die meisten geben bei 8 auf.</p>
-      <div style="margin-top:18px"><a class="btn ig--programm--klick--spiel" href="/spiel">Spielen</a></div>
-    </div>
-  </div>
-</section>
-
 <!-- FAQ -->
-<section class="faq" style="padding-top:0" data-ig-sicht="programm_faq">
+<section class="faq" data-ig-sicht="programm_faq">
   <div class="wrap">
     <h2>Kurz<br>gefragt</h2>
     <details><summary>Wie viel Zeit kostet mich das?</summary><p>Zwei Gruppen-Calls pro Woche, dazu die Hausaufgabe. Rechne mit drei bis vier Stunden pro Woche, die du dir fest blockst.</p></details>
