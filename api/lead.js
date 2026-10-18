@@ -122,11 +122,11 @@ const CAMPAIGNS = {
     cta: { label: "🐐 Mehr in der Inner GOAT Academy", url: "https://inner-goat.com/inner-goat-academy/" },
     outro: `<p>Komplett kostenlos — wir wollen sehen, ob's dir hilft. Wenn ja, sag uns Bescheid (einfach auf diese Mail antworten). Trust your goat.</p>`
   },
-  // Flappy-Ziege (go.inner-goat.com/spiel): ab 25 Punkten gibt es den 10-%-Code per Mail.
+  // Flappy Goat (go.inner-goat.com/spiel): ab 25 Punkten gibt es den 10-%-Code per Mail.
   // Rabatt gilt auf den Umsetzungsteil des Programms, NICHT auf die BAFA-Beratungsrechnung
   // (Nachlässe mindern sonst den Zuschuss). Lead geht wie alle anderen in GOAT Flows.
   spiel: {
-    subject: "Du hast die Ziege geschafft. Hier ist dein Code 🐐",
+    subject: "Flappy Goat geschafft. Hier ist dein Code 🐐",
     title: "25 Punkte. Respekt.",
     body: (name, ctx) => `
       <p>${hi(name)}</p>
