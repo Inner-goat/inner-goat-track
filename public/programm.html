@@ -51,10 +51,10 @@
   .video .ph .play{width:84px;height:84px;background:var(--orange);display:flex;align-items:center;justify-content:center}
   .video .ph .play:after{content:"";border-left:30px solid var(--ink);border-top:18px solid transparent;border-bottom:18px solid transparent;margin-left:6px}
   .video .ph small{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:22px;letter-spacing:.03em}
-  .proof{display:flex;flex-wrap:wrap;gap:0;border:2px solid var(--paper);margin-top:26px}
-  .proof div{flex:1 1 180px;padding:16px 18px;border-right:2px solid var(--paper);font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:22px;line-height:1}
-  .proof div:last-child{border:0}
-  .proof b{display:block;color:var(--orange);font-size:40px;margin-bottom:4px}
+  .proof{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+  .proof div{flex:1 1 180px;padding:18px 20px;background:var(--ink);color:var(--paper);font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:20px;line-height:1;letter-spacing:.03em;transform:rotate(-.6deg)}
+  .proof div:nth-child(2){transform:rotate(.5deg)}
+  .proof b{display:block;color:var(--orange);font-style:italic;font-size:64px;margin-bottom:8px;line-height:.9}
   /* Mirror */
   .mirror{border-top:2px solid var(--line)}
   .mirror div{padding:22px 0;border-bottom:2px solid var(--line);font-size:19px;display:grid;grid-template-columns:48px 1fr;gap:14px}
@@ -131,6 +131,8 @@
   </div>
 </section>
 
+<div class="marquee"><span>4 Monate <i>·</i> 3 Labs <i>·</i> 2 Live-Calls pro Woche <i>·</i> 1:1 Strategieberatung <i>·</i> Wir nehmen nicht jeden <i>·</i> 4 Monate <i>·</i> 3 Labs <i>·</i> 2 Live-Calls pro Woche <i>·</i> 1:1 Strategieberatung <i>·</i> Wir nehmen nicht jeden <i>·</i></span></div>
+
 <!-- SPIEGEL -->
 <section data-ig-sicht="programm_fuerwen">
   <div class="wrap">
@@ -149,17 +151,17 @@
   <div class="wrap">
     <h2>Drei, die das<br>mit uns gemacht haben</h2>
     <div class="testi">
-      <div class="card" data-person="robin">
+      <div class="card" data-person="robin"><div class="stamp">Nach 2 Monaten</div>
         <div class="res">Von 5.000 auf 15.000 € im Monat. In zwei Monaten.</div>
         <div class="q">„Vor zwei Monaten habe ich rund 5.000 Euro im Monat gemacht und dafür 100 Stunden die Woche gearbeitet. Heute sind es 15.000 Euro bei 60 Stunden. Mit Marco und Nel haben wir nicht an mehr Arbeit gearbeitet, sondern daran, was ich verkaufe, an wen, und zu welchem Preis."</div>
         <div class="who">Robin · Softwareentwickler, Familienvater</div>
       </div>
-      <div class="card" data-person="aniva">
+      <div class="card" data-person="aniva"><div class="stamp">Woche 1</div>
         <div class="res">„Es ist endlich real. Keine Hoffnung mehr."</div>
         <div class="q">„Es ist schon Wahnsinn, was man in anderthalb Stunden hinbekommt, wofür man alleine ein halbes Jahr braucht. Ich habe das Gefühl, 300 Schritte gemacht zu haben. Und ich bin erst eine Woche dabei."</div>
         <div class="who">Aniva · Online-Marketing und Content, Hamburg</div>
       </div>
-      <div class="card" data-person="julia">
+      <div class="card" data-person="julia"><div class="stamp">Ruhe im Kopf</div>
         <div class="res">Vom Unter-Wert-Verkaufen zu Ruhe im Kopf.</div>
         <div class="q">„Sobald ein Auftrag da war, blieb meine eigene Akquise liegen, und meine Preise blieben unter dem, was meine Arbeit wert ist. Mit Marco und Nel habe ich an drei Dingen gearbeitet: meinem Preis, meiner Zielgruppe und einem wöchentlichen System. Das Ergebnis ist nicht nur mehr Umsatz, sondern Ruhe im Kopf."</div>
         <div class="who">Julia · Texterin und LinkedIn-Ghostwriterin, Wien</div>
@@ -170,7 +172,8 @@
 </section>
 
 <!-- LABS -->
-<section class="on-paper" data-ig-sicht="programm_inhalt">
+<div class="tear-top"></div>
+<section class="on-paper" data-ig-sicht="programm_inhalt" style="padding-top:40px">
   <div class="wrap">
     <div class="kicker">Was in den vier Monaten drin ist</div>
     <h2>Drei Labs. Vier Monate.<br>Ein Weg nach draußen.</h2>
@@ -213,7 +216,8 @@
 </section>
 
 <!-- WIR -->
-<section class="on-paper" data-ig-sicht="programm_wir">
+<div class="tear-top"></div>
+<section class="on-paper" data-ig-sicht="programm_wir" style="padding-top:40px">
   <div class="wrap wir">
     <img src="/programm/portrait-marco-nel-sw.jpg" alt="Marco und Nel" loading="lazy">
     <div>
