@@ -170,7 +170,7 @@
     bg.forEach(function(b){ drawMountain(b.x, b.w, GROUND, b.h, b.rg, true, SHADE, false); });
     // Berge
     s.mts.forEach(function(m){
-      drawMountain(m.x, m.w, 0, m.top, m.rgTop, false, INK, true);
+      drawMountain(m.x, m.w, 0, m.top, m.rgTop, false, INK, false);
       drawMountain(m.x, m.w, GROUND, GROUND - m.top - GAP, m.rgBot, true, INK, true);
     });
     // Boden
