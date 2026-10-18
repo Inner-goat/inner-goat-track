@@ -46,6 +46,14 @@
   ],
   "rewrites": [
     {
+      "source": "/spiel",
+      "destination": "/spiel.html"
+    },
+    {
+      "source": "/spiel/",
+      "destination": "/spiel.html"
+    },
+    {
       "source": "/programm",
       "destination": "/programm.html"
     },

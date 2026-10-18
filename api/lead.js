@@ -122,6 +122,24 @@ const CAMPAIGNS = {
     cta: { label: "🐐 Mehr in der Inner GOAT Academy", url: "https://inner-goat.com/inner-goat-academy/" },
     outro: `<p>Komplett kostenlos — wir wollen sehen, ob's dir hilft. Wenn ja, sag uns Bescheid (einfach auf diese Mail antworten). Trust your goat.</p>`
   },
+  // Flappy-Ziege (go.inner-goat.com/spiel): ab 25 Punkten gibt es den 10-%-Code per Mail.
+  // Rabatt gilt auf den Umsetzungsteil des Programms, NICHT auf die BAFA-Beratungsrechnung
+  // (Nachlässe mindern sonst den Zuschuss). Lead geht wie alle anderen in GOAT Flows.
+  spiel: {
+    subject: "Du hast die Ziege geschafft. Hier ist dein Code 🐐",
+    title: "25 Punkte. Respekt.",
+    body: (name, ctx) => `
+      <p>${hi(name)}</p>
+      <p>die meisten geben bei 8 Punkten auf. Du hast <b>${ctx && ctx.score ? ctx.score : "25"}</b> geschafft. Dafür gibt es, wie versprochen, <b>10 % auf das Inner GOAT Programm</b>.</p>
+      <div style="background:#0E0E0E;color:#fff;border-radius:12px;padding:20px;margin:22px 0;text-align:center">
+        <div style="color:#FF5F00;font-weight:800;font-size:12px;letter-spacing:.6px">DEIN CODE</div>
+        <div style="font-weight:800;font-size:30px;letter-spacing:.12em;margin-top:8px">ZIEGE25</div>
+        <div style="font-size:13px;opacity:.8;margin-top:8px">Gültig bis 31.12.2026 · einmal pro Person · gilt auf den Umsetzungsteil des Programms</div>
+      </div>
+      <p>So löst du ihn ein: Buch dir ein 30-Minuten-Gespräch mit Nel und mir und nenn den Code im Termin. Dort bekommst du auch die Zahl, auf die er sich bezieht.</p>`,
+    cta: { label: "🐐 30 Minuten kennenlernen", url: "https://go.inner-goat.com/programm?src=spiel#termin" },
+    outro: `<p>Und falls du nur spielen wolltest: auch gut. Die Ziege freut sich trotzdem.</p>`
+  },
   // Newsletter-Landingpage (go.inner-goat.com/newsletter) — Willkommensmail, KEIN PDF
   newsletter: {
     subject: "Willkommen beim Inner GOAT Briefing 🐐",

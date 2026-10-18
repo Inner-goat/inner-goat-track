@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Flappy Ziege — inner GOAT</title>
+<link rel="preload" href="/programm/DharmaGothicE-1.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/programm/DharmaGothicE-2.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face{font-family:'Dharma Gothic E';src:url(/programm/DharmaGothicE-1.woff2) format('woff2');font-weight:100 900;font-style:normal;font-display:block}
+  @font-face{font-family:'Dharma Gothic E';src:url(/programm/DharmaGothicE-2.woff2) format('woff2');font-weight:100 900;font-style:italic;font-display:block}
+  :root{--ink:#181818;--orange:#FF5F01;--paper:#F1F2ED;--grey:#9E9E96;--display:'Dharma Gothic E',Impact,'Arial Narrow',sans-serif;--body:'Helvetica Neue',Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--ink);color:var(--paper);font-family:var(--body);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+  .wrap{max-width:520px;margin:0 auto;padding:18px 16px 40px}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .top img{height:26px}
+  .d{font-family:var(--display);font-weight:800;text-transform:uppercase;line-height:.9}
+  h1{font-family:var(--display);font-weight:800;font-style:italic;text-transform:uppercase;font-size:clamp(44px,12vw,72px);line-height:.9}
+  .sub{color:var(--grey);font-size:15px;margin:10px 0 16px}
+  .sub b{color:var(--paper)}
+  #stage{position:relative;width:100%;aspect-ratio:9/14;background:var(--orange);border:3px solid var(--paper);overflow:hidden;touch-action:manipulation;user-select:none}
+  canvas{display:block;width:100%;height:100%}
+  .hud{position:absolute;top:12px;left:0;right:0;text-align:center;font-family:var(--display);font-weight:800;font-style:italic;font-size:64px;color:var(--ink);line-height:1;pointer-events:none;text-shadow:0 2px 0 rgba(255,255,255,.35)}
+  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(24,24,24,.72)}
+  .overlay h2{font-family:var(--display);font-weight:800;font-style:italic;text-transform:uppercase;font-size:54px;line-height:.9;margin-bottom:10px}
+  .overlay p{font-size:15px;color:#ddd;max-width:360px}
+  .btn{display:inline-flex;align-items:center;gap:12px;background:var(--orange);color:var(--ink);text-decoration:none;font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:22px;letter-spacing:.03em;padding:12px 22px;border:0;cursor:pointer;margin-top:16px}
+  .btn:after{content:"→";font-family:var(--body);font-weight:700}
+  .btn.ghost{background:transparent;color:var(--paper);border:2px solid var(--paper)}
+  .goal{display:flex;gap:10px;margin-top:14px}
+  .goal div{flex:1;background:#222;padding:12px;border:1px solid #333;text-align:center}
+  .goal b{display:block;font-family:var(--display);font-weight:800;font-style:italic;font-size:40px;color:var(--orange);line-height:.9}
+  .goal span{font-size:12px;color:var(--grey);text-transform:uppercase;letter-spacing:.04em}
+  form{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:14px}
+  input{width:100%;padding:14px;border:2px solid var(--paper);background:var(--ink);color:var(--paper);font-size:16px;font-family:inherit}
+  input::placeholder{color:#888}
+  .fine{font-size:12px;color:#aaa;margin-top:8px;line-height:1.5}
+  .fine a{color:#aaa}
+  footer{text-align:center;padding:26px 18px;font-size:12.5px;color:#8a8a86;line-height:1.9}
+  footer a{color:#8a8a86}
+</style>
+<script src="/ig-tracking.js" data-seitentyp="lp" data-kampagne="spiel"></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><img src="/programm/logo-offwhite.svg" alt="inner GOAT"><span class="d" style="font-size:16px;letter-spacing:.06em">Flappy Ziege</span></div>
+  <h1>Schaff die Ziege.<br>Hol dir 10 %.</h1>
+  <p class="sub">Tipp zum Flattern, weich durch die Lücken. <b>25 Punkte</b>, und du bekommst 10 % auf das Inner GOAT Programm per Mail. Die meisten geben bei 8 auf.</p>
+
+  <div id="stage">
+    <canvas id="c"></canvas>
+    <div class="hud" id="hud">0</div>
+    <div class="overlay" id="start">
+      <h2>Bereit?</h2>
+      <p>Tippen oder Leertaste zum Flattern. Nicht an die Kante, nicht in die Pfosten.</p>
+      <button class="btn" id="go">Los</button>
+    </div>
+    <div class="overlay" id="over" hidden>
+      <h2 id="over-h">Daneben.</h2>
+      <p id="over-p"></p>
+      <button class="btn ig--spiel--klick--nochmal" id="again">Nochmal</button>
+    </div>
+    <div class="overlay" id="win" hidden>
+      <h2>25. Respekt.</h2>
+      <p>Wohin soll der Code? Du bekommst ihn sofort per Mail, zusammen mit dem Weg, wie du ihn einlöst.</p>
+      <form id="f">
+        <input type="text" id="name" placeholder="Vorname" autocomplete="given-name">
+        <input type="email" id="email" placeholder="deine@mail.de" required autocomplete="email">
+        <button class="btn ig--spiel--klick--code" type="submit">Code schicken</button>
+        <div class="fine">Mit dem Absenden bekommst du den Code und ab und zu das Inner GOAT Briefing. Abmelden jederzeit. <a href="https://inner-goat.com/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutz</a></div>
+      </form>
+    </div>
+    <div class="overlay" id="done" hidden>
+      <h2>Code ist raus.</h2>
+      <p>Schau in dein Postfach (auch Spam). Und wenn du eh schon hier bist:</p>
+      <a class="btn ig--spiel--klick--programm" href="/programm?src=spiel">Zum Programm</a>
+    </div>
+  </div>
+
+  <div class="goal">
+    <div><b id="best">0</b><span>Dein Rekord</span></div>
+    <div><b>25</b><span>Ziel</span></div>
+    <div><b>10 %</b><span>Rabatt</span></div>
+  </div>
+  <p class="fine" style="margin-top:14px">Code gilt bis 31.12.2026, einmal pro Person, auf den Umsetzungsteil des Programms. Du bekommst ihn im Gespräch angerechnet.</p>
+</div>
+<footer>© 2026 inner GOAT · <a href="https://inner-goat.com/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://inner-goat.com/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutz</a></footer>
+
+<script>
+(function(){
+  var GOAL = 25;
+  var cv = document.getElementById('c'), ctx = cv.getContext('2d');
+  var stage = document.getElementById('stage'), hud = document.getElementById('hud');
+  var start = document.getElementById('start'), over = document.getElementById('over'), win = document.getElementById('win'), done = document.getElementById('done');
+  var W = 450, H = 700; cv.width = W; cv.height = H;
+  var ORANGE = '#FF5F01', INK = '#181818', PAPER = '#F1F2ED';
+  // Ziege: das Inner-GOAT-Zeichen als Pfad (aus dem Logo), skaliert
+  var goat = new Path2D("M159.5,182.9h-49.5c0-28.7,3.3-58.4,27-81.2,23.4-22.5,53.7-25.6,83-25.6v49.5c-30.4,0-41.1,4.5-48.7,11.7-7.3,7-11.8,17.1-11.8,45.5Z M110,182.9h-49.5c0-28.5-4.5-38.5-11.8-45.5-7.5-7.2-18.3-11.7-48.7-11.7v-49.5c29.3,0,59.7,3.1,83,25.6,23.7,22.8,27,52.5,27,81.2Z M110,87.9c-42.5,0-73.8-25.4-101.3-52.9L43.8,0c28,28,45.9,38.4,66.3,38.4S148.3,28,176.3,0l35,35c-18,18-32.6,29.8-47.3,38.1-17.5,9.9-35.2,14.8-54,14.8Z");
+  var state, raf, best = 0;
+  try { best = parseInt(localStorage.getItem('ziege_best') || '0', 10) || 0; } catch(e) {}
+  document.getElementById('best').textContent = best;
+
+  function reset(){ state = { y: H/2, vy: 0, t: 0, pipes: [], score: 0, alive: true, started: false, won: false }; hud.textContent = '0'; }
+  function spawn(){ var gap = 190, margin = 90; var top = margin + Math.random() * (H - gap - 2*margin); state.pipes.push({ x: W + 40, top: top, gap: gap, passed: false }); }
+  function flap(){ if (!state.alive || state.won) return; if (!state.started) { state.started = true; spawn(); } state.vy = -7.4; }
+  function step(){
+    var s = state; s.t++;
+    if (s.started) {
+      s.vy += 0.42; s.y += s.vy;
+      if (s.t % 95 === 0) spawn();
+      for (var i = s.pipes.length - 1; i >= 0; i--) {
+        var p = s.pipes[i]; p.x -= 2.9;
+        if (!p.passed && p.x + 60 < 110) { p.passed = true; s.score++; hud.textContent = s.score; if (window.igTrack && s.score % 5 === 0) igTrack('spiel','punkte', String(s.score), s.score); if (s.score >= GOAL) return winGame(); }
+        if (p.x < -70) s.pipes.splice(i, 1);
+        // Kollision: Ziege als Kreis r=22 um (110, y)
+        var gx = 110, gy = s.y, r = 22;
+        if (gx + r > p.x && gx - r < p.x + 60 && (gy - r < p.top || gy + r > p.top + p.gap)) return die();
+      }
+      if (s.y + 22 > H - 40 || s.y - 22 < 0) return die();
+    } else { s.y = H/2 + Math.sin(s.t/12) * 10; }
+    draw(); raf = requestAnimationFrame(step);
+  }
+  function draw(){
+    var s = state;
+    ctx.fillStyle = ORANGE; ctx.fillRect(0,0,W,H);
+    // Boden
+    ctx.fillStyle = INK; ctx.fillRect(0, H-40, W, 40);
+    ctx.fillStyle = PAPER; for (var x = -((s.t*2.9)%40); x < W; x += 40) ctx.fillRect(x, H-40, 20, 4);
+    // Pfosten
+    s.pipes.forEach(function(p){
+      ctx.fillStyle = INK; ctx.fillRect(p.x, 0, 60, p.top); ctx.fillRect(p.x, p.top + p.gap, 60, H - 40 - p.top - p.gap);
+      ctx.fillStyle = PAPER; ctx.fillRect(p.x - 4, p.top - 14, 68, 14); ctx.fillRect(p.x - 4, p.top + p.gap, 68, 14);
+    });
+    // Ziege
+    ctx.save(); ctx.translate(110, s.y); ctx.rotate(Math.max(-0.5, Math.min(0.9, s.vy/10)));
+    ctx.scale(0.28, 0.28); ctx.translate(-107, -91);
+    ctx.fillStyle = INK; ctx.fill(goat);
+    ctx.restore();
+  }
+  function die(){
+    state.alive = false; cancelAnimationFrame(raf);
+    if (state.score > best) { best = state.score; try { localStorage.setItem('ziege_best', String(best)); } catch(e) {} document.getElementById('best').textContent = best; }
+    document.getElementById('over-h').textContent = state.score >= 15 ? 'Knapp.' : (state.score >= 8 ? 'Nicht schlecht.' : 'Daneben.');
+    document.getElementById('over-p').textContent = state.score + ' Punkte. Es fehlen ' + (GOAL - state.score) + '. Die Ziege hat Zeit.';
+    over.hidden = false;
+    if (window.igTrack) igTrack('spiel','ende', String(state.score), state.score);
+  }
+  function winGame(){
+    state.won = true; cancelAnimationFrame(raf); draw();
+    if (GOAL > best) { best = GOAL; try { localStorage.setItem('ziege_best', String(best)); } catch(e) {} document.getElementById('best').textContent = best; }
+    win.hidden = false; if (window.igTrack) igTrack('spiel','geschafft','25',25);
+  }
+  function begin(){ start.hidden = true; over.hidden = true; reset(); draw(); raf = requestAnimationFrame(step); }
+  document.getElementById('go').addEventListener('click', function(e){ e.stopPropagation(); begin(); });
+  document.getElementById('again').addEventListener('click', function(e){ e.stopPropagation(); begin(); });
+  stage.addEventListener('pointerdown', function(e){ if (e.target.closest('.overlay')) return; flap(); });
+  window.addEventListener('keydown', function(e){ if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); if (!start.hidden) begin(); else if (!over.hidden) begin(); else flap(); } });
+
+  document.getElementById('f').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var email = document.getElementById('email').value.trim(), name = document.getElementById('name').value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { document.getElementById('email').style.borderColor = ORANGE; return; }
+    var btn = e.target.querySelector('button'); btn.disabled = true; btn.textContent = 'Schicke…';
+    try {
+      var r = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: email, name: name, source: 'spiel', answer: 'score:' + GOAL }) });
+      if (!r.ok) throw new Error('fail');
+      win.hidden = true; done.hidden = false; if (window.igTrack) igTrack('funnel','lead','spiel');
+    } catch(err) { btn.disabled = false; btn.textContent = 'Nochmal versuchen'; }
+  });
+  reset(); draw();
+})();
+</script>
+</body>
+</html>
