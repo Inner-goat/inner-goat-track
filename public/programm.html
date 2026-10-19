@@ -57,16 +57,33 @@
   .proof b{display:block;color:var(--orange);font-style:italic;font-size:64px;margin-bottom:8px;line-height:.9}
   /* Mirror */
   .spiel{padding:70px 0}
-  .spiel-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .spiel-grid{display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start}
   .spiel-grid h2{font-size:clamp(44px,7vw,84px)}
-  .spiel-shot{display:block;justify-self:center;width:min(100%,340px);transform:rotate(1.6deg);box-shadow:0 18px 50px rgba(0,0,0,.28);border:3px solid var(--ink);transition:transform .25s}
-  .spiel-shot:hover{transform:rotate(0) scale(1.02)}
-  .spiel-shot img{display:block;width:100%;height:auto}
+  .goal{display:flex;gap:10px;margin-top:22px}
+  .goal div{flex:1;background:var(--ink);color:var(--paper);padding:12px;text-align:center}
+  .goal b{display:block;font-family:var(--display);font-weight:800;font-style:italic;font-size:40px;color:var(--orange);line-height:.9}
+  .goal span{font-size:11px;color:var(--grey);text-transform:uppercase;letter-spacing:.04em}
+  #stage{position:relative;width:100%;max-width:360px;aspect-ratio:9/14;background:var(--orange);border:3px solid var(--ink);overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none;justify-self:center;transform:rotate(1.2deg);box-shadow:0 18px 50px rgba(0,0,0,.22)}
+  #stage canvas{display:block;width:100%;height:100%}
+  #stage .hud{position:absolute;top:12px;left:0;right:0;text-align:center;font-family:var(--display);font-weight:800;font-style:italic;font-size:64px;color:var(--ink);line-height:1;pointer-events:none}
+  #stage .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;background:rgba(24,24,24,.78);color:var(--paper);gap:8px}
+  #stage .overlay[hidden]{display:none}
+  #stage .overlay h3{font-family:var(--display);font-weight:800;font-style:italic;text-transform:uppercase;font-size:50px;line-height:.9;margin:0}
+  #stage .overlay p{font-size:14px;color:#ddd;margin:0;max-width:300px}
+  .gbtn{display:inline-flex;align-items:center;gap:10px;background:var(--orange);color:var(--ink);font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:21px;letter-spacing:.03em;padding:11px 20px;border:2px solid var(--orange);cursor:pointer;margin-top:8px}
+  .gbtn:after{content:"→";font-family:var(--body);font-weight:700}
+  .gbtn.ghost{background:transparent;color:var(--paper);border-color:var(--paper)}
+  .gbtn[hidden]{display:none}
+  #stage form{display:flex;flex-direction:column;gap:8px;width:100%;max-width:280px}
+  #stage input{width:100%;padding:12px;border:2px solid var(--paper);background:var(--ink);color:var(--paper);font-size:16px;font-family:inherit}
+  #stage .fine{font-size:11px;color:#aaa;line-height:1.5}
+  #stage .fine a{color:#aaa}
+  .fine{font-size:13px;color:#5F6058;line-height:1.5}
   .fakten{padding:54px 0;border-top:3px solid var(--line);border-bottom:3px solid var(--line)}
   .fakten-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
   .fakten-grid div{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:22px;line-height:1;letter-spacing:.03em;padding:0 0 0 18px;border-left:3px solid var(--orange)}
   .fakten-grid b{display:block;font-style:italic;color:var(--orange);font-size:clamp(64px,8vw,110px);line-height:.85;margin-bottom:10px}
-  @media(max-width:760px){.spiel-grid{grid-template-columns:1fr}.spiel-shot{width:min(100%,280px)}.fakten-grid{grid-template-columns:repeat(2,1fr);gap:28px 18px}}
+  @media(max-width:760px){.spiel-grid{grid-template-columns:1fr}#stage{transform:none}.fakten-grid{grid-template-columns:repeat(2,1fr);gap:28px 18px}}
   .mirror{border-top:2px solid var(--line)}
   .mirror div{padding:22px 0;border-bottom:2px solid var(--line);font-size:19px;display:grid;grid-template-columns:48px 1fr;gap:14px}
   .mirror div span{font-family:var(--display);font-weight:800;color:var(--orange);font-size:34px;line-height:.8}
@@ -124,10 +141,9 @@
   <img class="bg" src="/programm/hero-marco-nel.webp" alt="">
   <div class="wrap top"><img src="/programm/logo-offwhite.svg" alt="inner GOAT"><span class="d" style="font-size:18px;letter-spacing:.06em">Das Programm</span></div>
   <div class="wrap content">
-    <div class="kicker">Für Solo-Experten, die ihr Handwerk können und beim Verkaufen noch nicht</div>
+    <div class="kicker">Für Selbstständige und Unternehmer in den ersten fünf Jahren</div>
     <h1>Du wirst sichtbar.<br>Dann wirst du<br>gebucht.</h1>
-    <div class="tear d i" style="font-size:clamp(34px,6vw,64px)">Ohne dich zu verbiegen.</div>
-    <p>Vier Monate mit zwei Gründern, die den Weg selbst gegangen sind. Schau dir das Video an, dann weißt du, ob das für dich ist. Wir nehmen nicht jeden.</p>
+    <p>Vier Monate mit zwei Gründern, die den Weg selbst gegangen sind. Schau dir das Video an, dann weißt du, ob das für dich ist.</p>
   </div>
 </section>
 
@@ -138,21 +154,56 @@
       <video id="vslv" controls playsinline preload="metadata" poster="/programm/vsl-poster.jpg"><source src="/programm/vsl.mp4" type="video/mp4"></video>
     </div>
     <a class="btn ig--programm--klick--cta_oben" href="#termin">30 Minuten kennenlernen</a>
-    <div class="proof"><div><b>100+</b>Gespräche mit Gründern</div><div><b>3x</b>Einkommen in 2 Monaten</div><div><b>BAFA</b>förderfähig</div></div>
+    <div class="proof"><div><b>200+</b>Unternehmern geholfen</div><div><b>3x</b>Einkommen in 2 Monaten</div><div><b>10+</b>Jahre Marketing und Sales</div></div>
   </div>
 </section>
 
 <!-- SPIEL -->
-<section class="on-paper spiel" data-ig-sicht="programm_spiel">
+<section class="on-paper spiel" id="spiel" data-ig-sicht="programm_spiel">
   <div class="wrap spiel-grid">
     <div>
-      <div class="kicker">Kleines Spiel, echter Rabatt</div>
-      <h2>10 % Rabatt<br>bei 25 Punkten.</h2>
-      <p>Flappy Goat. Tippen, flattern, durch die Bergketten. Ab 25 Punkten kommt der Code per Mail.</p>
-      <div style="margin-top:22px"><a class="btn ig--programm--klick--spiel" href="/spiel">Spielen</a></div>
+      <div class="kicker">Flappy Goat</div>
+      <h2>Jeder Punkt<br>ein Euro.</h2>
+      <p>Tippen, flattern, durch die Berge. Du hast zehn Versuche. Nach jedem Versuch kannst du dir den Betrag sichern, den du geschafft hast, bis zu 100 Euro auf das Programm. Der Code kommt per Mail.</p>
+      <div class="goal">
+        <div><b id="g-best">0</b><span>Dein Rekord</span></div>
+        <div><b id="g-saved">0 €</b><span>Gesichert</span></div>
+        <div><b id="g-tries">10</b><span>Versuche</span></div>
+      </div>
     </div>
-    <a class="spiel-shot ig--programm--klick--spiel_bild" href="/spiel" aria-label="Flappy Goat spielen"><img src="/programm/spiel-screenshot.png" alt="Flappy Goat: die Ziege fliegt zwischen schwarzen Bergen hindurch" width="450" height="700" loading="lazy"></a>
+    <div id="stage">
+      <canvas id="c"></canvas>
+      <div class="hud" id="hud">0</div>
+      <div class="overlay" id="g-start">
+        <h3>Bereit?</h3>
+        <p>Tippen zum Flattern. Nicht an die Kante, nicht in die Berge.</p>
+        <button class="gbtn ig--programm--klick--spiel_los" id="g-go" type="button">Los</button>
+      </div>
+      <div class="overlay" id="g-over" hidden>
+        <h3 id="g-over-h">Daneben.</h3>
+        <p id="g-over-p"></p>
+        <button class="gbtn ig--programm--klick--spiel_sichern" id="g-save" type="button" hidden>Sichern</button>
+        <button class="gbtn ghost ig--programm--klick--spiel_nochmal" id="g-again" type="button">Nochmal</button>
+      </div>
+      <div class="overlay" id="g-form" hidden>
+        <h3 id="g-form-h">25 Euro sichern.</h3>
+        <p>Wohin soll der Code?</p>
+        <form id="g-f">
+          <input type="text" id="g-name" placeholder="Vorname" autocomplete="given-name">
+          <input type="email" id="g-email" placeholder="deine@mail.de" required autocomplete="email">
+          <button class="gbtn ig--programm--klick--spiel_code" type="submit">Code schicken</button>
+          <div class="fine">Du bekommst den Code und ab und zu das Inner GOAT Briefing. Abmelden jederzeit. <a href="https://inner-goat.com/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutz</a></div>
+        </form>
+        <button class="gbtn ghost" id="g-back" type="button">Zurück</button>
+      </div>
+      <div class="overlay" id="g-done" hidden>
+        <h3 id="g-done-h">Code ist raus.</h3>
+        <p id="g-done-p">Schau in dein Postfach, auch im Spam.</p>
+        <button class="gbtn ghost ig--programm--klick--spiel_nochmal" id="g-again2" type="button">Nochmal</button>
+      </div>
+    </div>
   </div>
+  <p class="fine wrap" style="margin-top:18px">Der Code gilt auf das Programm, einmal pro Person, bis 31.12.2026. Du nennst ihn im Gespräch, dann wird er angerechnet.</p>
 </section>
 
 <!-- FAKTEN -->
@@ -172,10 +223,10 @@
   <div class="wrap">
     <h2>Klingt das<br>nach dir?</h2>
     <div class="mirror">
-      <div><span>01</span>Du bist seit null bis drei Jahren solo, oft nach einem Konzern-Kapitel, das irgendwann nicht mehr ging.</div>
-      <div><span>02</span>Du kannst dein Handwerk richtig gut. Aber die Anfragen kommen unregelmäßig, und das Einkommen schwankt.</div>
+      <div><span>01</span>Du bist in den ersten fünf Jahren selbstständig. Dein Handwerk kannst du. Jetzt müssen genug Leute davon erfahren.</div>
+      <div><span>02</span>Die Anfragen kommen unregelmäßig. In guten Monaten läuft es, in schlechten rechnest du.</div>
       <div><span>03</span>Du postest ab und zu, redest mit Leuten, arbeitest viel. Und trotzdem kennt kaum jemand deine Geschichte.</div>
-      <div><span>04</span>Du bist raus für die Freiheit, und jetzt fehlt dir die Sicherheit. Beides willst du. Das ist kein Widerspruch.</div>
+      <div><span>04</span>Du weißt, dass du mehr nehmen könntest. Und nennst trotzdem die kleine Zahl.</div>
     </div>
   </div>
 </section>
@@ -183,7 +234,7 @@
 <!-- BEWEIS -->
 <section data-ig-sicht="programm_beweis" id="beweis" style="padding-top:0">
   <div class="wrap">
-    <h2>Drei, die das<br>mit uns gemacht haben</h2>
+    <h2>Stimmen, die davon<br>profitiert haben</h2>
     <div class="testi">
       <div class="card" data-person="robin"><div class="stamp">Nach 2 Monaten</div>
         <div class="res">Von 5.000 auf 15.000 € im Monat. In zwei Monaten.</div>
@@ -215,21 +266,19 @@
     <div class="labs">
       <div class="lab"><div class="n">Story<br>Lab</div><div><h3>Du weißt, wofür du stehst.</h3><p>Wir suchen deinen Bruch, die Stelle, an der deine Geschichte echt wird. Danach sortierst du dich selbst ein, bevor es andere tun.</p></div></div>
       <div class="lab"><div class="n">Brand<br>Lab</div><div><h3>Die richtigen Leute wissen, dass es dich gibt.</h3><p>Ein Kanal, ein Rhythmus, ein klares Thema. Eine LinkedIn-Routine, die du auch in Woche drei noch durchhältst.</p></div></div>
-      <div class="lab"><div class="n">Sales<br>Lab</div><div><h3>Du sagst deinen Preis, ohne zu schlucken.</h3><p>Ehrlich, aus Haltung, ohne Tricks. Zuerst helfen, dann fragen. Den Preis nennen und dann still sein.</p></div></div>
+      <div class="lab"><div class="n">Sales<br>Lab</div><div><h3>Du nennst deinen Preis.</h3><p>Wir gehen die 27 Einwände durch, die immer kommen. Danach weißt du, was du sagst, wenn jemand „zu teuer" sagt.</p></div></div>
     </div>
-    <div class="incl">Dazu: Strategieberatung 1:1 mit Bericht · 2 Live-Calls pro Woche in der Gruppe · monatliches Online-Treffen · Hausaufgaben und wöchentlicher Check-in · deine Notion-Welt · Storytelling-Karten-App · über 150 Videos</div>
-    <p class="muted" style="margin-top:14px">Rechne mit drei bis vier Stunden pro Woche.</p>
+    <div class="incl">Dazu: monatliche 1:1-Strategieberatung · 2 Live-Calls pro Woche · wöchentlicher Check-in · dein Notion-Unternehmer-Template · Storytelling-Karten-App · über 150 Lerninhalte in der Academy</div>
   </div>
 </section>
 
-<!-- PREIS -->
-<section class="on-orange price" data-ig-sicht="programm_preis">
+<!-- BAFA -->
+<section class="on-orange price" data-ig-sicht="programm_bafa">
   <div class="wrap">
-    <div class="kicker">Was es kostet</div>
-    <div class="big">Die Zahl bekommst du.<br>In 30 Minuten.</div>
-    <p style="margin-top:10px;font-weight:600">Im selben Termin. Dazu, was drin ist, was nicht, und welche Wege es gibt, sie zu zahlen. Ratenzahlung ist möglich.</p>
+    <div class="kicker">BAFA-Förderung</div>
+    <h2>Der Staat will, dass du<br>Unternehmer wirst.</h2>
     <div class="bafa">
-      <b>BAFA-förderfähig.</b> Wir sind offiziell gelistete BAFA-Berater. Der Beratungsteil mit deinem Strategiebericht wird in Hamburg und den alten Bundesländern mit <b>bis zu 50 %</b> bezuschusst, in den neuen Bundesländern mit <b>bis zu 80 %</b>. Den Antrag wickeln wir für dich ab. Ob die Förderung bei dir greift, prüfen wir im Gespräch, nicht jeder Beruf ist antragsberechtigt. Die aktuelle Richtlinie läuft am <b>31.12.2026</b> aus.
+      Wir sind offiziell gelistete BAFA-Berater. Der Beratungsteil des Programms wird in Hamburg und den alten Bundesländern mit <b>bis zu 50 %</b> bezuschusst, in den neuen Bundesländern mit <b>bis zu 80 %</b>. Den Antrag wickeln wir für dich ab. Ob die Förderung bei dir greift, prüfen wir im Gespräch, nicht jeder Beruf ist antragsberechtigt. Die aktuelle Richtlinie läuft am <b>31.12.2026</b> aus.
       <img src="/bafa-karte.png" alt="BAFA-Fördergebiete" loading="lazy">
     </div>
     <div style="margin-top:26px"><a class="btn ig--programm--klick--cta_preis" href="#termin">30 Minuten kennenlernen</a></div>
@@ -239,13 +288,13 @@
 <!-- NICHT -->
 <section data-ig-sicht="programm_nicht">
   <div class="wrap">
-    <h2>Ehrlich: Für wen<br>ist das nichts?</h2>
+    <h2>Für wen ist<br>das nichts?</h2>
     <ul class="list">
-      <li>Du führst ein gefundetes Startup mit Team.</li>
-      <li>Du bist ausgebucht und hast keinen Schmerz.</li>
+      <li>Du führst ein Startup mit Investorenkapital in Millionenhöhe.</li>
+      <li>Du willst über die Ziellinie getragen werden.</li>
+      <li>Du hast keine Lust auf Veränderung und gehst nicht die Extrameile für dich selbst.</li>
       <li>Du suchst jemanden, der dir Kunden liefert, ohne dass du selbst sichtbar wirst.</li>
     </ul>
-    <p class="muted" style="margin-top:16px">Das machen wir nicht. Und das sagen wir dir auch im Gespräch so.</p>
   </div>
 </section>
 
@@ -265,11 +314,11 @@
 <!-- ABLAUF -->
 <section data-ig-sicht="programm_ablauf">
   <div class="wrap">
-    <h2>Was nach dem<br>Klick passiert</h2>
+    <h2>Was passiert<br>als Nächstes?</h2>
     <div class="steps">
-      <div class="step"><div class="n">01</div><div><h3>Du buchst 30 Minuten.</h3><p class="muted">Vorher drei kurze Fragen, damit im Termin keine Zeit für Grundfragen draufgeht.</p></div></div>
-      <div class="step"><div class="n">02</div><div><h3>Wir reden. Du bekommst ehrliches Feedback.</h3><p class="muted">Wo du stehst, woran es hakt, ob das Programm das Richtige für dich ist.</p></div></div>
-      <div class="step"><div class="n">03</div><div><h3>Danach entscheidest du. Und wir auch.</h3><p class="muted">Kein Pitch. Wenn es passt, sagen wir es. Wenn nicht, sagen wir das auch.</p></div></div>
+      <div class="step"><div class="n">01</div><div><h3>Du buchst 30 Minuten.</h3><p class="muted">Per Video, mit uns beiden.</p></div></div>
+      <div class="step"><div class="n">02</div><div><h3>Wir reden.</h3><p class="muted">Wo du stehst, woran es hakt, und ob das Programm das Richtige für dich ist. Dazu, was es kostet.</p></div></div>
+      <div class="step"><div class="n">03</div><div><h3>Danach entscheidest du.</h3><p class="muted">Und wir auch.</p></div></div>
     </div>
   </div>
 </section>
@@ -278,11 +327,11 @@
 <section class="faq" data-ig-sicht="programm_faq">
   <div class="wrap">
     <h2>Kurz<br>gefragt</h2>
-    <details><summary>Wie viel Zeit kostet mich das?</summary><p>Zwei Gruppen-Calls pro Woche, dazu die Hausaufgabe. Rechne mit drei bis vier Stunden pro Woche, die du dir fest blockst.</p></details>
+    <details><summary>Was kostet das?</summary><p>Den Preis nennen wir dir im Gespräch, in den ersten 30 Minuten. Dazu, was drin ist, was nicht, und wie du zahlen kannst. Ratenzahlung ist möglich.</p></details>
+    <details><summary>Wie viel Zeit kostet mich das?</summary><p>Zwei Live-Calls pro Woche, dazu die Umsetzung. Rechne mit drei bis vier Stunden pro Woche.</p></details>
     <details><summary>Gruppe oder eins zu eins?</summary><p>Beides. Die Strategieberatung ist eins zu eins. Die Umsetzung läuft in einer Gruppe von rund zehn Leuten, zweimal pro Woche.</p></details>
     <details><summary>Wie funktioniert die BAFA-Förderung?</summary><p>Der Beratungsteil ist förderfähig. Der Antrag wird vor dem Start gestellt, das übernehmen wir mit dir. Nach der Beratung bekommst du den Zuschuss direkt vom BAFA. Nicht jeder Beruf ist antragsberechtigt, das klären wir im Gespräch.</p></details>
-    <details><summary>Kann ich in Raten zahlen?</summary><p>Ja. Die Details besprechen wir im Gespräch.</p></details>
-    <details><summary>Ich bin noch nicht so weit.</summary><p>Dann ist das Gespräch trotzdem richtig. Du bekommst ehrliches Feedback, wo du stehst, und wir sagen dir, wenn es noch zu früh ist.</p></details>
+        <details><summary>Ich bin noch nicht so weit.</summary><p>Dann ist das Gespräch trotzdem richtig. Du bekommst ehrliches Feedback, wo du stehst, und wir sagen dir, wenn es noch zu früh ist.</p></details>
   </div>
 </section>
 
@@ -290,7 +339,7 @@
 <section class="on-orange" id="termin" data-ig-sicht="programm_termin">
   <div class="wrap">
     <h2>Du triffst<br>Marco und Nel.</h2>
-    <p style="font-weight:600">30 Minuten, per Video. Das Gespräch ist kostenlos. Wir nehmen nicht jeden.</p>
+    <p style="font-weight:600">30 Minuten, per Video. Das Gespräch ist kostenlos. Beide sind dabei.</p>
     <div class="calendly-inline-widget" data-url="https://calendly.com/inner-goat?hide_gdpr_banner=1&background_color=171717&text_color=f1f2ed&primary_color=ff5f01"></div>
     <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
   </div>
@@ -318,6 +367,104 @@
     v.addEventListener('ended', function () { igTrack('video', 'ende', 'programm', 100); });
   }
   window.addEventListener('message', function (e) { if (e.data && e.data.event === 'calendly.event_scheduled' && window.igTrack) igTrack('funnel', 'termin_gebucht', 'programm'); });
+
+  /* ---------- Flappy Goat ---------- */
+  (function(){
+    var MAX = 100, TRIES = 10;
+    var cv = document.getElementById('c'); if (!cv) return;
+    var ctx = cv.getContext('2d'), stage = document.getElementById('stage'), hud = document.getElementById('hud');
+    var ovStart = document.getElementById('g-start'), ovOver = document.getElementById('g-over'), ovForm = document.getElementById('g-form'), ovDone = document.getElementById('g-done');
+    var W = 450, H = 700, GROUND = H - 40, GX = 110, R = 22; cv.width = W; cv.height = H;
+    var ORANGE = '#FF5F01', INK = '#181818', PAPER = '#F1F2ED', SHADE = '#D94F00';
+    var SPEED = 2.6, GRAV = 0.40, FLAP = -7.2, GAP = 200, MW = 120, SPACING = 310;
+    var goat = new Path2D("M159.5,182.9h-49.5c0-28.7,3.3-58.4,27-81.2,23.4-22.5,53.7-25.6,83-25.6v49.5c-30.4,0-41.1,4.5-48.7,11.7-7.3,7-11.8,17.1-11.8,45.5Z M110,182.9h-49.5c0-28.5-4.5-38.5-11.8-45.5-7.5-7.2-18.3-11.7-48.7-11.7v-49.5c29.3,0,59.7,3.1,83,25.6,23.7,22.8,27,52.5,27,81.2Z M110,87.9c-42.5,0-73.8-25.4-101.3-52.9L43.8,0c28,28,45.9,38.4,66.3,38.4S148.3,28,176.3,0l35,35c-18,18-32.6,29.8-47.3,38.1-17.5,9.9-35.2,14.8-54,14.8Z");
+    var state, raf, lastT = 0;
+    var mem = { best: 0, saved: 0, tries: 0, email: '', name: '' };
+    try { var m = JSON.parse(localStorage.getItem('flappy_goat') || '{}'); for (var k in mem) if (m[k] != null) mem[k] = m[k]; } catch(e) {}
+    function store(){ try { localStorage.setItem('flappy_goat', JSON.stringify(mem)); } catch(e) {} }
+    function paint(){ document.getElementById('g-best').textContent = mem.best; document.getElementById('g-saved').textContent = mem.saved + ' €'; document.getElementById('g-tries').textContent = Math.max(0, TRIES - mem.tries); }
+    paint();
+
+    function ridge(){ var j = function(a){ return a + (Math.random()-0.5)*0.08; }; return [[0,0],[j(0.16),j(0.42)],[j(0.30),j(0.74)],[0.5,1],[j(0.64),j(0.80)],[j(0.82),j(0.46)],[1,0]]; }
+    function ridgeAt(rg, u){ if (u <= 0 || u >= 1) return 0; for (var i = 1; i < rg.length; i++) if (u <= rg[i][0]) { var a = rg[i-1], b = rg[i]; return a[1] + (b[1]-a[1]) * (u-a[0]) / (b[0]-a[0]); } return 0; }
+    var bg = []; for (var i = 0; i < 6; i++) bg.push({ x: i*160, w: 160 + Math.random()*80, h: 90 + Math.random()*110, rg: ridge() });
+    function reset(){ state = { y: H/2, vy: 0, t: 0, dist: 0, mts: [], score: 0, alive: true, started: false, won: false }; hud.textContent = '0'; }
+    function spawn(){ var margin = 110, top = margin + Math.random() * (GROUND - GAP - 2*margin); state.mts.push({ x: W + 40, top: top, w: MW, rgTop: ridge(), rgBot: ridge(), passed: false }); }
+    function flap(){ if (!state.alive || state.won) return; if (!state.started) { state.started = true; spawn(); } state.vy = FLAP; }
+    function mTop(m, x){ return m.top * ridgeAt(m.rgTop, (x - m.x) / m.w); }
+    function mBot(m, x){ return GROUND - (GROUND - m.top - GAP) * ridgeAt(m.rgBot, (x - m.x) / m.w); }
+    function hit(m){ var s = state; for (var dx = -R; dx <= R; dx += R/2) { var x = GX + dx; if (x < m.x || x > m.x + m.w) continue; var dy = Math.sqrt(Math.max(0, R*R - dx*dx)); if (s.y - dy < mTop(m, x) || s.y + dy > mBot(m, x)) return true; } return false; }
+    function step(now){
+      var s = state, dt = lastT ? Math.min(2, (now - lastT) / 16.667) : 1; lastT = now; s.t += dt;
+      if (s.started) {
+        s.vy += GRAV * dt; s.y += s.vy * dt; s.dist += SPEED * dt;
+        var last = s.mts[s.mts.length - 1]; if (!last || last.x < W + 40 - SPACING) spawn();
+        for (var i = s.mts.length - 1; i >= 0; i--) {
+          var m = s.mts[i]; m.x -= SPEED * dt;
+          if (!m.passed && m.x + m.w < GX) { m.passed = true; s.score++; hud.textContent = s.score; if (window.igTrack && s.score % 10 === 0) igTrack('spiel','punkte', String(s.score), s.score); if (s.score >= MAX) return end(true); }
+          if (m.x + m.w < -20) s.mts.splice(i, 1);
+          if (hit(m)) return end(false);
+        }
+        if (s.y + R > GROUND || s.y - R < 0) return end(false);
+        for (var k = 0; k < bg.length; k++) { bg[k].x -= SPEED * 0.3 * dt; if (bg[k].x + bg[k].w < 0) { bg[k].x += bg.length * 160 + 60; bg[k].rg = ridge(); } }
+      } else { s.y = H/2 + Math.sin(s.t/12) * 10; }
+      draw(); raf = requestAnimationFrame(step);
+    }
+    function poly(pts){ ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.closePath(); }
+    function mountain(x, w, baseY, h, rg, up, color, snow){
+      var pts = rg.map(function(p){ return [x + p[0]*w, baseY + (up ? -1 : 1) * p[1] * h]; });
+      ctx.fillStyle = color; poly(pts); ctx.fill();
+      if (snow && h > 60) { var cap = baseY - h * 0.80; ctx.save(); ctx.beginPath(); ctx.rect(x - 2, 0, w + 4, cap); ctx.clip(); ctx.fillStyle = PAPER; poly(pts); ctx.fill(); ctx.restore(); }
+    }
+    function draw(){
+      var s = state;
+      ctx.fillStyle = ORANGE; ctx.fillRect(0,0,W,H);
+      bg.forEach(function(b){ mountain(b.x, b.w, GROUND, b.h, b.rg, true, SHADE, false); });
+      s.mts.forEach(function(m){ mountain(m.x, m.w, 0, m.top, m.rgTop, false, INK, false); mountain(m.x, m.w, GROUND, GROUND - m.top - GAP, m.rgBot, true, INK, true); });
+      ctx.fillStyle = INK; ctx.fillRect(0, GROUND, W, 40);
+      ctx.fillStyle = PAPER; for (var x = -(s.dist % 40); x < W; x += 40) ctx.fillRect(x, GROUND, 20, 4);
+      ctx.save(); ctx.translate(GX, s.y); ctx.rotate(Math.max(-0.5, Math.min(0.9, s.vy/10))); ctx.scale(0.28, 0.28); ctx.translate(-107, -91); ctx.fillStyle = INK; ctx.fill(goat); ctx.restore();
+    }
+    function end(won){
+      state.alive = false; state.won = won; cancelAnimationFrame(raf); draw();
+      var sc = state.score; mem.tries++; if (sc > mem.best) mem.best = sc; store(); paint();
+      var left = TRIES - mem.tries;
+      document.getElementById('g-over-h').textContent = won ? '100. Mehr geht nicht.' : (sc >= 40 ? 'Stark.' : (sc >= 15 ? 'Nicht schlecht.' : 'Daneben.'));
+      document.getElementById('g-over-p').textContent = sc + (sc === 1 ? ' Punkt = ' : ' Punkte = ') + sc + ' Euro Rabatt.' + (left > 0 ? ' Noch ' + left + (left === 1 ? ' Versuch.' : ' Versuche.') : ' Das waren deine zehn Versuche.');
+      var save = document.getElementById('g-save'); save.hidden = !(sc > mem.saved); save.textContent = sc + ' Euro sichern';
+      document.getElementById('g-again').hidden = (left <= 0 || won);
+      ovOver.hidden = false;
+      if (window.igTrack) igTrack('spiel','ende', String(sc), sc);
+    }
+    function begin(){ if (mem.tries >= TRIES) return; ovStart.hidden = true; ovOver.hidden = true; ovDone.hidden = true; ovForm.hidden = true; reset(); lastT = 0; draw(); raf = requestAnimationFrame(step); }
+    document.getElementById('g-go').addEventListener('click', function(e){ e.stopPropagation(); begin(); });
+    document.getElementById('g-again').addEventListener('click', function(e){ e.stopPropagation(); begin(); });
+    document.getElementById('g-again2').addEventListener('click', function(e){ e.stopPropagation(); begin(); });
+    stage.addEventListener('pointerdown', function(e){ if (e.target.closest('.overlay')) return; e.preventDefault(); flap(); });
+    window.addEventListener('keydown', function(e){ if ((e.code === 'Space' || e.code === 'ArrowUp') && state && state.alive && state.started && ovForm.hidden) { e.preventDefault(); flap(); } });
+    document.addEventListener('visibilitychange', function(){ lastT = 0; });
+
+    document.getElementById('g-save').addEventListener('click', function(e){ e.stopPropagation(); document.getElementById('g-form-h').textContent = state.score + ' Euro sichern.'; document.getElementById('g-name').value = mem.name || ''; document.getElementById('g-email').value = mem.email || ''; ovOver.hidden = true; ovForm.hidden = false; });
+    document.getElementById('g-back').addEventListener('click', function(e){ e.stopPropagation(); ovForm.hidden = true; ovOver.hidden = false; });
+    document.getElementById('g-f').addEventListener('submit', async function(e){
+      e.preventDefault();
+      var email = document.getElementById('g-email').value.trim(), name = document.getElementById('g-name').value.trim(), sc = state.score;
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { document.getElementById('g-email').style.borderColor = ORANGE; return; }
+      var btn = e.target.querySelector('button'); btn.disabled = true; btn.textContent = 'Schicke…';
+      try {
+        var r = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: email, name: name, source: 'spiel', answer: String(sc) }) });
+        if (!r.ok) throw new Error('fail');
+        mem.saved = sc; mem.email = email; mem.name = name; store(); paint();
+        document.getElementById('g-done-h').textContent = sc + ' Euro gesichert.';
+        document.getElementById('g-done-p').textContent = 'Code ZIEGE' + sc + ' ist unterwegs an ' + email + '. Schau auch im Spam.' + (TRIES - mem.tries > 0 ? ' Mehr Punkte, mehr Euro.' : '');
+        document.getElementById('g-again2').hidden = (TRIES - mem.tries <= 0 || sc >= MAX);
+        ovForm.hidden = true; ovDone.hidden = false; if (window.igTrack) igTrack('funnel','lead','spiel', sc);
+      } catch(err) { btn.disabled = false; btn.textContent = 'Nochmal versuchen'; }
+      btn.disabled = false; btn.textContent = 'Code schicken';
+    });
+    if (mem.tries >= TRIES) { ovStart.querySelector('h3').textContent = 'Zehn Versuche sind rum.'; ovStart.querySelector('p').textContent = 'Dein Bestes: ' + mem.best + ' Euro. Gesichert: ' + mem.saved + ' Euro.'; document.getElementById('g-go').hidden = true; }
+    reset(); draw();
+  })();
 </script>
 </body>
 </html>
