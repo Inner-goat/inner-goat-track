@@ -138,7 +138,7 @@ const CAMPAIGNS = {
       </div>
       <p>So löst du ihn ein: Buch dir 30 Minuten mit Nel und mir und nenn den Code im Gespräch. Dort bekommst du auch den Preis, auf den er sich bezieht.</p>
       ${c.score < 100 ? `<p>Du hast noch Versuche übrig? Dann hol dir einen höheren Code. Der höchste zählt.</p>` : ``}`,
-    cta: { label: "🐐 30 Minuten kennenlernen", url: "https://go.inner-goat.com/programm?src=spiel#termin" },
+    cta: { label: "🐐 30 Minuten kennenlernen", url: "https://calendly.com/inner-goat?utm_source=spiel" },
     outro: `<p>Und falls du nur spielen wolltest: auch gut. Die Ziege freut sich trotzdem.</p>`
   },
   // Newsletter-Landingpage (go.inner-goat.com/newsletter) — Willkommensmail, KEIN PDF
